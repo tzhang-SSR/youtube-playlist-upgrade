@@ -10,22 +10,17 @@
   <section>
     <div class="container">
       <p>Log In With Google</p>
-      <button class="btn red" id="authorize-button" (click)="handleAuthClick">Log In</button>
-      <button class="btn red" id="signout-button" (click)="handleSignoutClick">Log Out</button>
-      <br>
+      <ng-template [ngIf]="isLoggedIn" [ngIfElse]="loggedOut">
+        <button mat-raised-button color="warn" id="authorize-button" (click)="handleAuthClick()">Log In</button>
+      </ng-template>
+      <ng-template #loggedOut>
+        <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
+      </ng-template>
       <div id="content">
-        <div class="row">
-          <div class="col s6">
-            <form id="channel-form">
-              <div class="input-field col s6">
-                <input type="text" placeholder="Enter Channel Name" id="channel-input">
-                <input type="submit" value="Get Channel Data" class="btn grey">
-              </div>
-            </form>
-          </div>
-          <div id="channel-data" class="col s6"></div>
+        <div *ngFor="let item of playlistInfo">
+          <img src={{item.thumbnail}} />
+          <p>{{item.title}}</p>
         </div>
-        <div class="row" id="video-container"></div>
 
       </div>
     </div>
