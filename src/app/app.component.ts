@@ -34,7 +34,6 @@ export class AppComponent {
       .then(
         () => {
           console.log("GAPI client loaded for API");
-          this.getChannelInfo()
         },
         function (err) {
           console.error("Error loading GAPI client for API", err);
@@ -54,8 +53,6 @@ export class AppComponent {
         this.loadClient()
       });
   }
-
-
 
   getChannelInfo() {
     //https://developers.google.com/youtube/v3/docs/channels/list?apix=true
@@ -101,27 +98,14 @@ export class AppComponent {
     return items.map((item: any) => ({ title: item.snippet.title, thumbnail: item.snippet.thumbnails.medium.url, id: item.id }))
   }
 
-  displayPlaylist(arr: Array<any>) {
-    console.log({ arr })
-    // let output = "";
-    // for (const item of arr) {
-    //   const { snippet } = item;
-    //   const { title, thumbnails } = snippet;
-    //   console.log(title, thumbnails.default.url);
-    //   output += `
-    //   <div>
-    //         <img src=${thumbnails.medium.url} />
-    //         <p>${title}</p>
-    //       </div>`;
-    //   videoContainer.innerHTML = output;
-    // }
-  }
-
-
   // Handle login
   handleAuthClick = () => {
     gapi.auth2.getAuthInstance().signIn({ scope: this.SCOPES })
-      .then(() => { console.log("Sign-in successful"); this.isLoggedIn = true },
+      .then(() => {
+        console.log("Sign-in successful");
+        this.isLoggedIn = true
+        this.getChannelInfo()
+      },
         (err) => { console.error("Error signing in", { err }) });
   }
 

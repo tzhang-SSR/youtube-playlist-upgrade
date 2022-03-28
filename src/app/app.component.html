@@ -11,10 +11,10 @@
     <div class="container">
       <p>Log In With Google</p>
       <ng-template [ngIf]="isLoggedIn" [ngIfElse]="loggedOut">
-        <button mat-raised-button color="warn" id="authorize-button" (click)="handleAuthClick()">Log In</button>
+        <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
       </ng-template>
       <ng-template #loggedOut>
-        <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
+        <button mat-raised-button color="warn" id="authorize-button" (click)="handleAuthClick()">Log In</button>
       </ng-template>
       <div id="content">
         <div *ngFor="let item of playlistInfo">
