@@ -8,21 +8,27 @@
   </nav>
   <br>
   <section>
-    <div class="container">
+    <div class="navbar">
       <p>Log In With Google</p>
-      <ng-template [ngIf]="isLoggedIn" [ngIfElse]="loggedOut">
+      <ng-template [ngIf]="isAuthorized" [ngIfElse]="loggedOut">
         <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
       </ng-template>
       <ng-template #loggedOut>
         <button mat-raised-button color="warn" id="authorize-button" (click)="handleAuthClick()">Log In</button>
       </ng-template>
-      <div id="content">
+    </div>
+    <div class="container">
+      <div id="sidebar">
         <div *ngFor="let item of playlistInfo">
-          <img src={{item.thumbnail}} />
-          <p>{{item.title}}</p>
+          <a routerLink="/playlist/{{item.id}}">
+            <p>{{item.title}}</p>
+          </a>
         </div>
-
       </div>
+      <div id="content">
+        <router-outlet></router-outlet>
+      </div>
+
     </div>
   </section>
 </div>

@@ -3,3 +3,15 @@
 #signout-button {
   /* display: none; */
 }
+
+.container {
+  display: flex;
+}
+
+#sidebar {
+  flex-basis: 20%;
+}
+
+#content {
+  flex-basis: 80%;
+}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+// import { GoogleSigninService } from './google-signin.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'youtube-playlist';
   CLIENT_ID =
-    "762803049191-o035n72nd4lu3c8a4pjl358akhu0bus0.apps.googleusercontent.com";
+    "762803049191-pgltb7dk1rqdk7ad5d76218ggscp5m3s.apps.googleusercontent.com";
   DISCOVERY_DOCS = [
     "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
   ];
@@ -17,12 +17,16 @@ export class AppComponent {
   playlistInfo: Array<any> = [];
   isLoggedIn = false;
 
-  ngOnInit() {
-    this.handleClientLoad()
+  GoogleAuth: any;
+  user: any;
+  isAuthorized = false;
+
+  constructor() {
+
   }
 
-  // Load auth2 library
-  handleClientLoad() {
+  ngOnInit(): void {
+    // Load auth2 library
     gapi.load("client:auth2", this.initClient);
   }
 
@@ -50,8 +54,31 @@ export class AppComponent {
         scope: this.SCOPES,
       })
       .then(() => {
+        this.GoogleAuth = gapi.auth2.getAuthInstance();
+        // Listen for sign-in state changes.
+        this.GoogleAuth.isSignedIn.listen(this.handleSigninStatus);
+
+        // Handle initial sign-in state. (Determine if user is already signed in.)
+        this.handleSigninStatus();
+
         this.loadClient()
+        // const isSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get()
+        if (this.isAuthorized) {
+          // this.isLoggedIn = true
+          this.getChannelInfo()
+        }
       });
+  }
+
+  handleSigninStatus = () => {
+    this.user = this.GoogleAuth.currentUser.get();
+    this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
+    console.log('Authorized', this.isAuthorized)
+    if (this.isAuthorized) {
+
+    } else {
+
+    }
   }
 
   getChannelInfo() {
@@ -64,7 +91,6 @@ export class AppComponent {
       .then(
         (response: any) => {
           // Handle the results here (response.result has the parsed body).
-          console.log("Response", response);
           this.getPlaylist();
         },
         function (err: any) {
@@ -84,7 +110,6 @@ export class AppComponent {
       .then(
         (response: any) => {
           // Handle the results here (response.result has the parsed body).
-          console.log("Response", response);
           this.playlistInfo = this.formatPlaylistInfo(response.result.items)
           // this.displayPlaylist(response.result.items);
         },
@@ -95,23 +120,25 @@ export class AppComponent {
   }
 
   formatPlaylistInfo = (items: any) => {
-    return items.map((item: any) => ({ title: item.snippet.title, thumbnail: item.snippet.thumbnails.medium.url, id: item.id }))
+    return items.map((item: any) => ({ title: item.snippet.title, id: item.id }))
   }
 
   // Handle login
   handleAuthClick = () => {
-    gapi.auth2.getAuthInstance().signIn({ scope: this.SCOPES })
+    this.GoogleAuth.signIn({ scope: this.SCOPES })
       .then(() => {
         console.log("Sign-in successful");
-        this.isLoggedIn = true
+        // this.isLoggedIn = true
         this.getChannelInfo()
       },
-        (err) => { console.error("Error signing in", { err }) });
+        (err: any) => { console.error("Error signing in", { err }) });
   }
 
   // Handle logout
   handleSignoutClick = () => {
-    gapi.auth2.getAuthInstance().signOut().then(() => { this.isLoggedIn = false; });
+    this.GoogleAuth.signOut();
+    this.GoogleAuth.disconnect();
+    // gapi.auth2.getAuthInstance().signOut().then(() => { this.googleUser = null });
 
   }
 
