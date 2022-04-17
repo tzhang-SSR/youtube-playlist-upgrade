@@ -1,1 +1,12 @@
-<p>playlist-page:{{playlistId}} works!</p>
+<div class="playlistContainer">
+    <div class="videoWrapper" *ngFor="let item of playlistVideos">
+        <a *ngIf="item.isValid; else invalidVideo" target="_blank" href="{{VIDEO_URL}}{{item.videoId}}">
+            <img src={{item.img}} alt={{item.title}} />
+            <p>{{item.title}}</p>
+        </a>
+        <ng-template #invalidVideo>
+            <div class="defaultThumbnail">Video Unavailable</div>
+            <p>{{item.title}}</p>
+        </ng-template>
+    </div>
+</div>

@@ -1,34 +1,28 @@
 <div>
-  <nav class="black">
-    <div class="nav-wrapper">
-      <div class="container">
-        <a href="#!" class="brand-logo">YouTube Channel Data</a>
-      </div>
-    </div>
-  </nav>
-  <br>
   <section>
-    <div class="navbar">
-      <p>Log In With Google</p>
+    <mat-toolbar>
+      <a href="/">My Application</a>
       <ng-template [ngIf]="isAuthorized" [ngIfElse]="loggedOut">
         <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
       </ng-template>
       <ng-template #loggedOut>
         <button mat-raised-button color="warn" id="authorize-button" (click)="handleAuthClick()">Log In</button>
       </ng-template>
-    </div>
-    <div class="container">
-      <div id="sidebar">
-        <div *ngFor="let item of playlistInfo">
-          <a routerLink="/playlist/{{item.id}}">
-            <p>{{item.title}}</p>
-          </a>
-        </div>
+    </mat-toolbar>
+    <div class="playlistContainer">
+      <div class="playlist-sidebar">
+        <mat-button-toggle-group name="fontStyle" aria-label="playlist name" class="playlistItems">
+          <mat-button-toggle *ngFor="let item of playlistInfo">
+            <a routerLink="/playlist/{{item.id}}" class="playlistTab">
+              <mat-icon>playlist_play</mat-icon>
+              <div>{{item.title}}</div>
+            </a>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
       </div>
-      <div id="content">
+      <div class="playlist-content">
         <router-outlet></router-outlet>
       </div>
-
     </div>
   </section>
 </div>
