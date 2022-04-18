@@ -9,6 +9,9 @@ import { PlaylistPageComponent } from './playlist-page/playlist-page.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { MatIconModule } from '@angular/material/icon';
     RouterModule,
     MatToolbarModule,
     MatButtonToggleModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginatorModule,
+    MatInputModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

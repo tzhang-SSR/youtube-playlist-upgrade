@@ -112,13 +112,14 @@ export class AppComponent {
     //https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
     gapi.client.youtube.playlists
       .list({
-        part: ["snippet,contentDetails"],
+        part: ["snippet"],
         maxResults: 50,
         mine: true,
       })
       .then(
         (response: any) => {
           this.ngZone.run(() => {
+            console.log({ response })
             // Handle the results here (response.result has the parsed body).
             this.playlistInfo = this.formatPlaylistInfo(response.result.items)
           })
