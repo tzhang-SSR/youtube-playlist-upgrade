@@ -1,0 +1,30 @@
+<div class="playlistHeader">
+    <img src={{thumbnail}} alt="thumbnail of playlist {{title}}" />
+    <div class="headerDetails">
+        <div class="editBox" *ngIf="!editTitle; else titleInput">
+            <h2>{{title}}</h2>
+            <div>
+                <mat-icon (click)="editTitle = true">edit</mat-icon>
+            </div>
+        </div>
+        <ng-template #titleInput>
+            <input id="titleInput" type="text" [(ngModel)]="title">
+            <button (click)="editTitle = false" color="primary" mat-button>Save</button>
+            <button (click)="editTitle = false" mat-button>Cancel</button>
+        </ng-template>
+        <p>{{videoCount}} videos <span id="divider">·</span> <span id="privacyStatus">{{status}}</span></p>
+        <div class="editBox" *ngIf="!editDescription; else descriptionInput">
+            <p>{{description}}</p>
+            <div>
+                <mat-icon (click)="editDescription = true">edit</mat-icon>
+            </div>
+        </div>
+        <ng-template #descriptionInput>
+            <input matInput type="text" [(ngModel)]="description">
+            <div>
+                <button (click)="editDescription = false" color="primary" mat-button>Save</button>
+                <button (click)="editDescription = false" mat-button>Cancel</button>
+            </div>
+        </ng-template>
+    </div>
+</div>

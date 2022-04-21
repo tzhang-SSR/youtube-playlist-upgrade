@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PlaylistPageComponent } from './playlist-page.component';
 
 describe('PlaylistPageComponent', () => {
@@ -8,9 +7,9 @@ describe('PlaylistPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlaylistPageComponent ]
+      declarations: [PlaylistPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

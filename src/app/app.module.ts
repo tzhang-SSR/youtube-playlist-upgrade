@@ -12,11 +12,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
+import { PlaylistDialogComponent } from './playlist-dialog/playlist-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { PlaylistHeaderComponent } from './playlist-header/playlist-header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PlaylistPageComponent
+    PlaylistPageComponent,
+    PlaylistDialogComponent,
+    PlaylistHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,9 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatPaginatorModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,11 +1,4 @@
-<div class="playlistHeader">
-    <img src={{thumbnail}} alt="thumbnail of playlist {{title}}" />
-    <div class="headerDetails">
-        <h2>{{title}}</h2>
-        <p>{{videoCount}} videos <span id="divider">·</span> <span id="privacyStatus">{{status}}</span></p>
-        <p>{{description}}</p>
-    </div>
-</div>
+<app-playlist-header [playlistId]="playlistId"></app-playlist-header>
 <div class="search-form">
     <mat-icon matPrefix>search</mat-icon>
     <input matInput placeholder="Type search word here..." [(ngModel)]="keyword" [ngModelOptions]="{ standalone: true }"
@@ -16,12 +9,27 @@
 </div>
 <div class="playlistContainer">
     <div class="videoWrapper" *ngFor="let item of playlistVideos">
-        <a *ngIf="item.isValid; else invalidVideo" target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
-            <img src={{item.img}} alt={{item.title}} />
-            <p>{{item.title}}</p>
-        </a>
+        <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
+            <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
+                <img src={{item.img}} alt={{item.title}} />
+                <p>{{item.title}}</p>
+            </a>
+            <button class="moreBtn" mat-icon-button [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="removeVideo(item.playlistItemId)">
+                    <span>Remove from {{title}}</span>
+                </button>
+                <button mat-menu-item (click)="openDialog()">
+                    <span>Save to playlist</span>
+                </button>
+            </mat-menu>
+        </div>
         <ng-template #invalidVideo>
-            <div class="defaultThumbnail">Video Unavailable</div>
+            <div class=" defaultThumbnail">Video Unavailable
+            </div>
             <p>{{item.title}}</p>
         </ng-template>
     </div>

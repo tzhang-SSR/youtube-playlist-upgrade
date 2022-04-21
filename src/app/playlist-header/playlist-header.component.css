@@ -1,0 +1,46 @@
+.playlistHeader {
+    display: flex;
+    padding: 20px 15px;
+}
+
+#privacyStatus {
+    text-transform: capitalize;
+}
+
+#divider {
+    font-size: 28px;
+    margin: 0 5px;
+}
+
+.headerDetails {
+    margin-left: 15px;
+}
+
+.headerDetails p {
+    display: flex;
+    color: #606060;
+    max-width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.editBox h2,
+.editBox p {
+    margin: 0;
+}
+
+.editBox {
+    display: flex;
+    align-items: center;
+}
+
+.editBox div:nth-child(2) {
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+
+#titleInput {
+    font-size: 20px;
+    font-weight: 500;
+}

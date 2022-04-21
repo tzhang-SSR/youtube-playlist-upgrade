@@ -1,6 +1,9 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
+import { PlaylistService } from '../playlist.service';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PlaylistDialogComponent } from '../playlist-dialog/playlist-dialog.component';
 
 @Component({
   selector: 'app-playlist-page',
@@ -34,7 +37,8 @@ export class PlaylistPageComponent implements OnInit {
   thumbnail = ''
   keyword = ''
 
-  constructor(private route: ActivatedRoute, private ngZone: NgZone) {
+  constructor(private route: ActivatedRoute, private ngZone: NgZone,
+    private playlistService: PlaylistService, public dialog: MatDialog) {
     this.playlistItems = []
     this.playlistItemsCache = []
     this.pageItems = []
@@ -59,8 +63,8 @@ export class PlaylistPageComponent implements OnInit {
       .then(
         () => {
           // GAPI client loaded for API
-          this.getPlaylistItems()
           this.getPlaylistInfo()
+          this.getPlaylistItems()
         },
         function (err) {
           console.error("Error loading GAPI client for API", err);
@@ -133,7 +137,6 @@ export class PlaylistPageComponent implements OnInit {
 
       this.playlistItems = itemList
       this.playlistItemsCache = itemList
-
       this.pageItems = itemList.slice(0, this.PAGE_SIZE)
       this.handlePlaylistDisplay(this.pageItems)
     })
@@ -151,7 +154,7 @@ export class PlaylistPageComponent implements OnInit {
       const videoId = item.snippet?.resourceId?.videoId
       // check if any youtube video is inavaialble
       const isValid = title != 'Deleted Video' && Object.keys(thumbnails).length > 0
-      return { videoId, title, publishedAt, owner: videoOwnerChannelTitle, img, isValid }
+      return { videoId, title, publishedAt, owner: videoOwnerChannelTitle, img, isValid, playlistItemId: item.id }
     })
   }
 
@@ -179,4 +182,17 @@ export class PlaylistPageComponent implements OnInit {
     this.playlistItems = this.playlistItemsCache
     this.handleInitialDisplay()
   }
+
+  removeVideo = (id: string) => {
+    this.playlistService.deletePlaylistItems(id)
+    window.location.reload()
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(PlaylistDialogComponent, { data: {} })
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log({result})
+    });
+  }
+
 }
