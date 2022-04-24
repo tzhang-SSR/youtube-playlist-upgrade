@@ -1,13 +1,14 @@
 import { Component, OnInit, Inject, NgZone } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PlaylistService } from '../playlist.service';
 
 @Component({
-  selector: 'app-playlist-dialog',
-  templateUrl: './playlist-dialog.component.html',
-  styleUrls: ['./playlist-dialog.component.css']
+  selector: 'app-playlist-dialog-group',
+  templateUrl: './playlist-dialog-group.component.html',
+  styleUrls: ['./playlist-dialog-group.component.css']
 })
-export class PlaylistDialogComponent implements OnInit {
+export class PlaylistDialogGroupComponent implements OnInit {
+
   CLIENT_ID =
     "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
   DISCOVERY_DOCS = [
@@ -17,10 +18,11 @@ export class PlaylistDialogComponent implements OnInit {
   SCOPES = "https://www.googleapis.com/auth/youtube";
 
   playlistStatusList: any
+  selectedPlaylists: Array<string> = []
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { videoId: string },
-    public dialogRef: MatDialogRef<PlaylistDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { videoIdList: Array<string>, playlistVideoIdList: Array<string>, removeVideos: boolean },
+    public dialogRef: MatDialogRef<PlaylistDialogGroupComponent>,
     private playlistService: PlaylistService,
     private ngZone: NgZone) {
     this.playlistStatusList = []
@@ -73,16 +75,30 @@ export class PlaylistDialogComponent implements OnInit {
           const item = playlistItems ? playlistItems[i] : {}
           const privacyStatus = item.status?.privacyStatus
           const playlistId = item.id || ''
-          const statusResult = await this.getVideoStatus(playlistId, this.data.videoId)
-          const { inPlaylist, playlistItemId } = statusResult
 
-          const videoStatus = { playlistId, title: item?.snippet?.title, inPlaylist, playlistItemId, privacyStatus }
+          const videoStatus = { playlistId, title: item?.snippet?.title, privacyStatus }
           statusList.push(videoStatus)
         }
-
         this.playlistStatusList = statusList
       }
     )
+  }
+
+
+  isPlaylistSelected = (playlistId: string) => {
+    return this.selectedPlaylists.includes(playlistId)
+  }
+
+
+  handleToggle = (playlistId: string) => {
+    const isSelected = this.isPlaylistSelected(playlistId)
+    let arr = []
+    if (isSelected) {
+      arr = this.selectedPlaylists.filter(e => e != playlistId)
+    } else {
+      arr = [...this.selectedPlaylists, playlistId]
+    }
+    this.selectedPlaylists = arr
   }
 
   getVideoStatus = (playlistId: string, videoId: string) => {
@@ -100,18 +116,22 @@ export class PlaylistDialogComponent implements OnInit {
   }
 
 
-  handleToggle = (event: any, playlistId: string) => {
-    const { videoId } = this.data
-    if (event.checked) {
-      // add video the playlist
-      this.playlistService.addVideotoPlaylist(playlistId, videoId)
-    } else {
-      this.ngZone.run(async () => {
-        // remove video from the playlist
-        const itemList = await this.playlistService.getPlaylistItems(playlistId)
-        const item = itemList.find((item: any) => item.snippet.resourceId.videoId == videoId)
-        this.playlistService.deleteVideofromPlaylist(item.id)
-      })
+  handleSave = async () => {
+    const { videoIdList, playlistVideoIdList, removeVideos } = this.data
+    // check if any playlists is selected
+    if (this.selectedPlaylists.length > 0) {
+      // copy videos to playlist
+      for (const playlistId of this.selectedPlaylists) {
+        for (const id of videoIdList) {
+          await this.playlistService.addVideotoPlaylist(playlistId, id)
+        }
+      }
+      if (removeVideos) {
+        // delete videos from the current playlist
+        for (const id of playlistVideoIdList) {
+          await this.playlistService.deleteVideofromPlaylist(id)
+        }
+      }
     }
   }
 

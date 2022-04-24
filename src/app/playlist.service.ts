@@ -1,4 +1,6 @@
+import { StringMapWithRename } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable, NgZone } from '@angular/core';
+import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,7 @@ export class PlaylistService {
     //https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
     const res = await gapi.client.youtube.playlists
       .list({
-        part: ["snippet"],
+        part: ["snippet, status",],
         maxResults: 50,
         mine: true,
       })
@@ -28,11 +30,32 @@ export class PlaylistService {
     return data
   }
 
-  deletePlaylistItems = async (id: string) => {
+  getPlaylistItems = async (playlistId: string) => {
+    let pageToken = ''
+    let itemList: any[] = []
+
+    do {
+      // https://developers.google.com/youtube/v3/docs/playlistItems/list
+      const res = await gapi.client.youtube.playlistItems.list({
+        "part": [
+          "snippet,contentDetails"
+        ],
+        "maxResults": 50,
+        "playlistId": playlistId,
+        "pageToken": pageToken
+      })
+      const data = await res;
+      const { nextPageToken, items } = data.result
+      pageToken = nextPageToken || ''
+      itemList = itemList.concat(items)
+    } while (pageToken)
+    return itemList
+  }
+
+  deleteVideofromPlaylist = async (id: string) => {
     try {
       const res = await gapi.client.youtube.playlistItems.delete({ id })
       const result = await res
-      console.log({ result })
       return result
     } catch (err) {
       console.log({ err })
@@ -50,4 +73,70 @@ export class PlaylistService {
     const data = await res
     return data
   }
+
+  addVideotoPlaylist = async (playlistId: string, videoId: string) => {
+    const res = await gapi.client.youtube.playlistItems
+      .insert({
+        part: ["snippet"],
+        resource: {
+          snippet: {
+            playlistId,
+            position: 0,
+            resourceId: {
+              kind: "youtube#video",
+              videoId,
+            }
+          }
+        }
+      })
+    const response = await res
+    // console.log({ response })
+  }
+
+  createNewPlaylist = async (title: string, isPublic: boolean = false) => {
+    try {
+      const res = await gapi.client.youtube.playlists
+        .insert({
+          part: ["snippet, status"],
+          resource: {
+            snippet: {
+              title
+            },
+            status: {
+              privacyStatus: isPublic ? "public" : 'private'
+            }
+          }
+        })
+      const response = await res
+      return response
+    } catch (err) {
+      console.log({ err })
+    }
+    return null
+  }
+
+  deletePlaylist = async (playlistId: string) => {
+    const res = await gapi.client.youtube.playlists.delete({
+      "id": playlistId
+    })
+    const response = await res
+  }
+
+  searchVideobyKeywords = async (keywords: string) => {
+    try {
+      const res = await gapi.client.youtube.search.list({
+        part: [
+          "snippet"
+        ],
+        maxResults: 6,
+        q: keywords
+      })
+      const response = await res
+      return response
+    } catch (err) {
+      console.log({ err })
+    }
+    return null
+  }
+
 }

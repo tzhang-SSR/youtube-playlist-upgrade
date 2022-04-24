@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Add videos to playlist</h2>
+<!-- <p>add-videos-dialog {{this.data.playlistId}} works!</p> -->
+<div mat-dialog-content class="diadlog-content">
+    <mat-form-field appearance="fill">
+        <mat-label>Enter keyword to search</mat-label>
+        <input matInput [(ngModel)]="keyword" required (keyup)="searchVideos()" />
+    </mat-form-field>
+    <div class="searchResults">
+        <div class="videoDisplay" *ngFor="let item of videoItems">
+            <div *ngIf="item.videoId; else invalidVideo" (click)="handleSelection(item.videoId)">
+                <img src={{item.thumbnail}} />
+                <p>{{item.title}}</p>
+                <mat-icon *ngIf="isVideoSelected(item.videoId); else uncheckIcon" class="icon-checked">
+                    check_circle
+                </mat-icon>
+                <ng-template #uncheckIcon>
+                    <mat-icon class="icon-checked">
+                        check_circle_outline
+                    </mat-icon>
+                </ng-template>
+            </div>
+            <ng-template #invalidVideo>
+                <div class="defaultThumbnail">Video Unavailable</div>
+                <p>{{item.title}}</p>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button color="primary" (click)="addVideos()">Save</button>
+    <button mat-button mat-dialog-close>Cancel</button>
+</div>

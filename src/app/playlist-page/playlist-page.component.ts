@@ -2,8 +2,11 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { PlaylistService } from '../playlist.service';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PlaylistDialogComponent } from '../playlist-dialog/playlist-dialog.component';
+import { PlaylistDialogGroupComponent } from '../playlist-dialog-group/playlist-dialog-group.component';
+import { AddVideosDialogComponent } from '../add-videos-dialog/add-videos-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-playlist-page',
@@ -35,16 +38,31 @@ export class PlaylistPageComponent implements OnInit {
   status = 'Public'
   description = 'No Description'
   thumbnail = ''
+
   keyword = ''
+  isEditing: boolean = false
+  selectedVideos: any
 
   constructor(private route: ActivatedRoute, private ngZone: NgZone,
-    private playlistService: PlaylistService, public dialog: MatDialog) {
+    private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
     this.playlistItems = []
     this.playlistItemsCache = []
     this.pageItems = []
     this.route.paramMap.subscribe(params => {
+      this.initializeVariables()
       this.ngOnInit();
     });
+  }
+
+  handleRecirect = () => {
+    this.ngZone.run(async () => {
+      const data = await this.playlistService.getPlaylists()
+      const playlistItems = data.result.items
+      if (playlistItems) {
+        const initialPlaylistId = playlistItems[0].id
+        this.router.navigate(['/playlist/', initialPlaylistId])
+      }
+    })
   }
 
   ngOnInit(): void {
@@ -63,8 +81,12 @@ export class PlaylistPageComponent implements OnInit {
       .then(
         () => {
           // GAPI client loaded for API
-          this.getPlaylistInfo()
-          this.getPlaylistItems()
+          if (!this.playlistId) {
+            this.handleRecirect()
+          } else {
+            this.getPlaylistInfo()
+            this.getPlaylistItems()
+          }
         },
         function (err) {
           console.error("Error loading GAPI client for API", err);
@@ -86,6 +108,12 @@ export class PlaylistPageComponent implements OnInit {
       });
   }
 
+  initializeVariables = () => {
+    this.keyword = ''
+    this.isEditing = false
+    this.selectedVideos = []
+  }
+
   getPlaylistInfo() {
     //https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
     gapi.client.youtube.playlists
@@ -96,7 +124,6 @@ export class PlaylistPageComponent implements OnInit {
       .then(
         (response: any) => {
           this.ngZone.run(() => {
-            console.log({ response })
             // Handle the results here (response.result has the parsed body).
             const { snippet, status, contentDetails } = response.result.items[0]
             this.videoCount = contentDetails.itemCount
@@ -115,26 +142,8 @@ export class PlaylistPageComponent implements OnInit {
 
   getPlaylistItems = () => {
     // get and store video items from the playlist
-    let pageToken = ''
-    let itemList: any[] = []
-
     this.ngZone.run(async () => {
-      do {
-        // https://developers.google.com/youtube/v3/docs/playlistItems/list
-        const res = await gapi.client.youtube.playlistItems.list({
-          "part": [
-            "snippet,contentDetails"
-          ],
-          "maxResults": 50,
-          "playlistId": this.playlistId,
-          "pageToken": pageToken
-        })
-        const data = await res;
-        const { nextPageToken, items } = data.result
-        pageToken = nextPageToken || ''
-        itemList = itemList.concat(items)
-      } while (pageToken)
-
+      const itemList = await this.playlistService.getPlaylistItems(this.playlistId)
       this.playlistItems = itemList
       this.playlistItemsCache = itemList
       this.pageItems = itemList.slice(0, this.PAGE_SIZE)
@@ -166,6 +175,7 @@ export class PlaylistPageComponent implements OnInit {
   }
 
   handleSearch = () => {
+    this.isEditing = false
     if (this.keyword) {
       const result = this.playlistItemsCache.filter((item: any) => {
         return item.snippet.title.toUpperCase().includes(this.keyword.toUpperCase())
@@ -184,14 +194,70 @@ export class PlaylistPageComponent implements OnInit {
   }
 
   removeVideo = (id: string) => {
-    this.playlistService.deletePlaylistItems(id)
+    this.playlistService.deleteVideofromPlaylist(id)
     window.location.reload()
   }
 
-  openDialog() {
-    const dialogRef = this.dialog.open(PlaylistDialogComponent, { data: {} })
+  openDialog = (videoId: string) => {
+    const dialogRef = this.dialog.open(PlaylistDialogComponent, { data: { videoId } })
     dialogRef.afterClosed().subscribe(result => {
-      // console.log({result})
+      window.location.reload()
+    });
+  }
+
+  findVideoIdByItemId = (itemId: string) => {
+    const videoItem = this.playlistItemsCache.find((item: any) => item.id == itemId)
+    return videoItem.snippet?.resourceId?.videoId
+  }
+
+  getVideoIdList = () => {
+    const videoIdList = this.selectedVideos.map((id: any) => this.findVideoIdByItemId(id))
+    return [...new Set(videoIdList)]
+  }
+
+  isVideoSelected = (videoId: string): boolean => {
+    return this.selectedVideos.includes(videoId)
+  }
+
+  handleVideoSelecton = (videoId: string) => {
+    let arr = []
+    const isSelected = this.isVideoSelected(videoId)
+    if (isSelected) {
+      arr = this.selectedVideos.filter((e: string) => e != videoId)
+    } else {
+      arr = [...this.selectedVideos, videoId]
+    }
+    this.selectedVideos = arr
+  }
+
+  openGroupDialog = (removeVideos: boolean = false) => {
+    const videoIdList = this.getVideoIdList()
+    const playlistVideoIdList = this.selectedVideos
+
+    const dialogRef = this.dialog.open(PlaylistDialogGroupComponent,
+      { data: { videoIdList, playlistVideoIdList, removeVideos } })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (removeVideos) {
+        window.location.reload()
+      }
+    });
+  }
+
+  deleteByGroup = async () => {
+    for (const id of this.selectedVideos) {
+      // const videoItemId = this.playlistItemsCache.find((item: any) => item.snippet.resourceId.videoId == id).id
+      await this.playlistService.deleteVideofromPlaylist(id)
+    }
+    window.location.reload()
+  }
+
+  openNewVideoDialog = () => {
+    const dialogRef = this.dialog.open(AddVideosDialogComponent,
+      { data: { playlistId: this.playlistId } })
+
+    dialogRef.afterClosed().subscribe(result => {
+      window.location.reload()
     });
   }
 

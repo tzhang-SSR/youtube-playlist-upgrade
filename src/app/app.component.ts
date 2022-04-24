@@ -1,5 +1,8 @@
 import { Component, NgZone } from '@angular/core';
 import { PlaylistService } from './playlist.service';
+import { MatDialog } from '@angular/material/dialog';
+import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +25,7 @@ export class AppComponent {
   isAuthorized: boolean;
   user: any;
 
-  constructor(private ngZone: NgZone, private playlistService: PlaylistService) {
+  constructor(private ngZone: NgZone, private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
     this.isAuthorized = false;
   }
 
@@ -71,7 +74,6 @@ export class AppComponent {
     this.ngZone.run(() => {
       this.user = this.GoogleAuth.currentUser.get();
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
-      console.log('Authorized', this.isAuthorized)
       this.getChannelInfo()
     })
   }
@@ -80,8 +82,6 @@ export class AppComponent {
     this.ngZone.run(() => {
       this.user = this.GoogleAuth.currentUser.get();
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
-      console.log({ isSignedIn })
-      console.log(this.isAuthorized)
       if (this.isAuthorized) {
         this.getChannelInfo() //display playlist data
       } else {
@@ -99,7 +99,6 @@ export class AppComponent {
       })
       .then(
         () => {
-          // Handle the results here (response.result has the parsed body).
           this.ngZone.run(() => { this.getPlaylist(); })
         },
         function (err: any) {
@@ -111,7 +110,6 @@ export class AppComponent {
   getPlaylist() {
     this.ngZone.run(async () => {
       const response = await this.playlistService.getPlaylists()
-      // Handle the results here (response.result has the parsed body).
       this.playlistInfo = this.formatPlaylistInfo(response?.result.items)
     })
   }
@@ -131,7 +129,31 @@ export class AppComponent {
 
   handleSignoutClick = () => {
     this.GoogleAuth.signOut();
-    this.GoogleAuth.disconnect();
+    // this.GoogleAuth.disconnect();
+  }
+
+  openNewPlaylistDialog = () => {
+    const dialogRef = this.dialog.open(NewPlaylistDialogComponent)
+    dialogRef.afterClosed().subscribe(() => {
+      window.location.reload()
+    });
+  }
+
+  sortPlaylistTitles = (isReverse: boolean = false) => {
+    let arr = this.playlistInfo.sort(
+      (a, b) => {
+        const titleA = a.title.toUpperCase()
+        const titleB = b.title.toUpperCase()
+        if (titleA < titleB) { return isReverse ? 1 : -1 }
+        if (titleA > titleB) { return isReverse ? -1 : 1 }
+        return 0
+      }
+    )
+    this.playlistInfo = arr
+  }
+
+  goToHomePgae = () => {
+    this.router.navigate(['/'])
   }
 
 }

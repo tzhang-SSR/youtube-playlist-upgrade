@@ -1,8 +1,9 @@
 <div *ngIf="playlistStatusList.length; else spinner">
-    <h2 mat-dialog-title>Save to...</h2>
+    <h2 mat-dialog-title>Save videos to...</h2>
     <div mat-dialog-content class="diadlog-content">
         <div *ngFor="let item of playlistStatusList" class="titleWrapper">
-            <mat-checkbox color="warn" [checked]="item.inPlaylist" (change)="handleToggle($event, item.playlistId)">
+            <mat-checkbox color="warn" [checked]="isPlaylistSelected(item.playlistId)"
+                (change)="handleToggle(item.playlistId)">
                 {{item.title}}
             </mat-checkbox>
             <div>
@@ -14,7 +15,8 @@
         </div>
     </div>
     <div mat-dialog-actions>
-        <button mat-button mat-dialog-close>Close</button>
+        <button mat-button mat-dialog-close (click)="handleSave()" color="primary">Save</button>
+        <button mat-button mat-dialog-close>Cancel</button>
     </div>
 </div>
 <ng-template #spinner>

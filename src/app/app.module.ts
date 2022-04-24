@@ -16,13 +16,22 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PlaylistDialogComponent } from './playlist-dialog/playlist-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PlaylistHeaderComponent } from './playlist-header/playlist-header.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { PlaylistDialogGroupComponent } from './playlist-dialog-group/playlist-dialog-group.component';
+import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-dialog.component';
+import { AddVideosDialogComponent } from './add-videos-dialog/add-videos-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlaylistPageComponent,
     PlaylistDialogComponent,
-    PlaylistHeaderComponent
+    PlaylistHeaderComponent,
+    PlaylistDialogGroupComponent,
+    NewPlaylistDialogComponent,
+    AddVideosDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +46,10 @@ import { PlaylistHeaderComponent } from './playlist-header/playlist-header.compo
     MatInputModule,
     FormsModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

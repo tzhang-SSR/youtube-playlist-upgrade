@@ -22,6 +22,7 @@
     max-width: 500px;
     overflow: hidden;
     text-overflow: ellipsis;
+    align-items: center;
 }
 
 .editBox h2,
