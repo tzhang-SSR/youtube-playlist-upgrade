@@ -1,5 +1,5 @@
 <app-playlist-header [playlistId]="playlistId"></app-playlist-header>
-<div *ngIf="playlistItems.length; else emptyPlaylist">
+<div *ngIf="playlistItems.length || keyword.length; else emptyPlaylist">
     <div class="playlistEditor">
         <div class="editorWrapper">
             <mat-slide-toggle [disabled]="keyword.length > 0" class="example-margin" color="warn"
@@ -15,13 +15,13 @@
                     <mat-icon>file_copy</mat-icon>
                     <div>Copy</div>
                 </div>
-                <div class="iconWrapper" (click)="openGroupDialog(true)">
+                <!-- <div class="iconWrapper" (click)="openGroupDialog(true)">
                     <mat-icon>folder_special</mat-icon>
                     <div>Move</div>
-                </div>
+                </div> -->
             </div>
         </div>
-        <div class=" search-form" *ngIf="!isEditing">
+        <div class="search-form" *ngIf="!isEditing">
             <mat-icon matPrefix>search</mat-icon>
             <input matInput placeholder="Type search word here..." [(ngModel)]="keyword"
                 [ngModelOptions]="{ standalone: true }" (ngModelChange)="handleSearch()" />
@@ -55,6 +55,9 @@
                 <p>{{item.title}}</p>
             </ng-template>
         </div>
+        <div *ngIf="!playlistItems.length && keyword.length">
+            <h3>No videos found. Try another keyword</h3>
+        </div>
     </div>
     <ng-template #editingMode>
         <div class="playlistContainer">
@@ -87,5 +90,10 @@
     <div class="emptyPlaylist">
         <h3>No videos found in this playlist</h3>
         <button mat-raised-button color="warn" (click)="openNewVideoDialog()">Add One</button>
+    </div>
+</ng-template>
+<ng-template #zeroSearchResult>
+    <div class="emptyPlaylist">
+        <h3>No videos found. Try another keyword</h3>
     </div>
 </ng-template>

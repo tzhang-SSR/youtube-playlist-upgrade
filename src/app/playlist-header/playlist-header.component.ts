@@ -3,6 +3,7 @@ import { PlaylistService } from '../playlist.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddVideosDialogComponent } from '../add-videos-dialog/add-videos-dialog.component';
+import { GlobalVariables } from '../global-variables';
 
 @Component({
   selector: 'app-playlist-header',
@@ -10,13 +11,10 @@ import { AddVideosDialogComponent } from '../add-videos-dialog/add-videos-dialog
   styleUrls: ['./playlist-header.component.css']
 })
 export class PlaylistHeaderComponent implements OnInit {
-  CLIENT_ID =
-    "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
-  DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-  ];
-  API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
-  SCOPES = "https://www.googleapis.com/auth/youtube";
+  DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
+  SCOPES = GlobalVariables.SCOPES
+  API_KEY = GlobalVariables.API_KEY
+  CLIENT_ID = GlobalVariables.CLIENT_ID
 
   @Input() playlistId: string = '';
 
@@ -99,7 +97,7 @@ export class PlaylistHeaderComponent implements OnInit {
       { data: { playlistId: this.playlistId } })
 
     dialogRef.afterClosed().subscribe(result => {
-      window.location.reload()
+      this.router.navigate(['/playlist', this.playlistId])
     });
   }
 

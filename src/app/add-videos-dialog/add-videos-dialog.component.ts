@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PlaylistService } from '../playlist.service';
+import { GlobalVariables } from '../global-variables';
 
 @Component({
   selector: 'app-add-videos-dialog',
@@ -8,14 +9,10 @@ import { PlaylistService } from '../playlist.service';
   styleUrls: ['./add-videos-dialog.component.css']
 })
 export class AddVideosDialogComponent implements OnInit {
-
-  CLIENT_ID =
-    "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
-  DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-  ];
-  API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
-  SCOPES = "https://www.googleapis.com/auth/youtube";
+  DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
+  SCOPES = GlobalVariables.SCOPES
+  API_KEY = GlobalVariables.API_KEY
+  CLIENT_ID = GlobalVariables.CLIENT_ID
 
   keyword: string = ''
   videoItems: Array<any> = []
@@ -38,7 +35,6 @@ export class AddVideosDialogComponent implements OnInit {
       .then(
         () => {
           // GAPI client loaded for API
-
         },
         function (err) {
           console.error("Error loading GAPI client for API", err);

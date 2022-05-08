@@ -3,6 +3,7 @@ import { PlaylistService } from './playlist.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-dialog.component';
 import { Router } from '@angular/router';
+import { GlobalVariables } from './global-variables';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,12 @@ import { Router } from '@angular/router';
 
 export class AppComponent {
   title = 'youtube-playlist';
-  CLIENT_ID =
-    "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
-  DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-  ];
-  API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
-  SCOPES = "https://www.googleapis.com/auth/youtube";
+  
+  DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
+  SCOPES = GlobalVariables.SCOPES
+  API_KEY = GlobalVariables.API_KEY
+  CLIENT_ID = GlobalVariables.CLIENT_ID
+  
 
   playlistInfo: Array<any> = [];
   GoogleAuth: any;

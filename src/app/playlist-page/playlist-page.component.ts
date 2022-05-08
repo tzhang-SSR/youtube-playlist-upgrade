@@ -7,6 +7,7 @@ import { PlaylistDialogComponent } from '../playlist-dialog/playlist-dialog.comp
 import { PlaylistDialogGroupComponent } from '../playlist-dialog-group/playlist-dialog-group.component';
 import { AddVideosDialogComponent } from '../add-videos-dialog/add-videos-dialog.component';
 import { Router } from '@angular/router';
+import { GlobalVariables } from '../global-variables';
 
 @Component({
   selector: 'app-playlist-page',
@@ -15,13 +16,11 @@ import { Router } from '@angular/router';
 })
 
 export class PlaylistPageComponent implements OnInit {
-  CLIENT_ID =
-    "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
-  DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-  ];
-  API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
-  SCOPES = "https://www.googleapis.com/auth/youtube";
+  DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
+  SCOPES = GlobalVariables.SCOPES
+  API_KEY = GlobalVariables.API_KEY
+  CLIENT_ID = GlobalVariables.CLIENT_ID
+  
   YT_VIDEO_URL = "https://www.youtube.com/watch?v="
   PAGE_SIZE = 25;
 

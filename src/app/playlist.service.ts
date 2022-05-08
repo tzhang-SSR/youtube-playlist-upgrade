@@ -1,17 +1,17 @@
-import { StringMapWithRename } from '@angular/compiler/src/compiler_facade_interface';
 import { Injectable, NgZone } from '@angular/core';
-import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlaylistService {
-  CLIENT_ID =
-    "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
+  // CLIENT_ID =
+  //   "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
+  CLIENT_ID = "665732569510-2nkdd47ucsthr3cnvb7vbtocs1lv972m.apps.googleusercontent.com"
   DISCOVERY_DOCS = [
     "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
   ];
-  API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
+  // API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
+  API_KEY = "AIzaSyCHmu8woYHvRij4_XyMLjTxojEh3N8YON0"
   SCOPES = "https://www.googleapis.com/auth/youtube";
 
   constructor(private ngZone: NgZone) { }
