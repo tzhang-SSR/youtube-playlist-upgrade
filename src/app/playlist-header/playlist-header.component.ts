@@ -86,7 +86,7 @@ export class PlaylistHeaderComponent implements OnInit {
   }
 
   deletePlaylist = async () => {
-    if (confirm('Are you sure you want to delete this?')) {
+    if (confirm('Are you sure you want to delete this playlist?')) {
       await this.playlistService.deletePlaylist(this.playlistId)
       this.router.navigate(['/playlist'])
     }

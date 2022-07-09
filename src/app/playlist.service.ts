@@ -1,18 +1,17 @@
 import { Injectable, NgZone } from '@angular/core';
+import { GlobalVariables } from './global-variables';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlaylistService {
-  // CLIENT_ID =
-  //   "762803049191-65gfec9uf4414c853rfsm25kh255ob0c.apps.googleusercontent.com";
-  CLIENT_ID = "665732569510-2nkdd47ucsthr3cnvb7vbtocs1lv972m.apps.googleusercontent.com"
-  DISCOVERY_DOCS = [
-    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
-  ];
-  // API_KEY = "AIzaSyDAKaHlIA8BZpS2cLeOEQ0rClFR8KCy258";
-  API_KEY = "AIzaSyCHmu8woYHvRij4_XyMLjTxojEh3N8YON0"
-  SCOPES = "https://www.googleapis.com/auth/youtube";
+  DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
+  SCOPES = GlobalVariables.SCOPES
+  API_KEY = GlobalVariables.API_KEY
+  CLIENT_ID = GlobalVariables.CLIENT_ID
+
+  private userPlaylists: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   constructor(private ngZone: NgZone) { }
 
@@ -27,6 +26,11 @@ export class PlaylistService {
         mine: true,
       })
     const data = await res
+    // turn fetched user playlist title list into obserevable and subscribe to it
+    // reference: https://stackoverflow.com/questions/59449661/angular-how-to-subscribe-data-from-component-to-component
+    const formattedPlaylistInfo = this.formatPlaylistInfo(data.result.items)
+    this.userPlaylists.next(formattedPlaylistInfo);
+    // this.userPlaylists = this.formatPlaylistInfo(data.result.items)
     return data
   }
 
@@ -138,5 +142,12 @@ export class PlaylistService {
     }
     return null
   }
+
+  // formatPlaylistInfo = (items: any) => items.map((item: any) => ({ title: item.snippet.title, id: item.id }))
+  formatPlaylistInfo = (items: any) => {
+    return items.map((item: any) => ({ title: item.snippet.title, id: item.id }))
+  }
+
+  getUserPlaylists = () =>  this.userPlaylists.asObservable();
 
 }

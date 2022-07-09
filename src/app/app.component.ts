@@ -32,6 +32,7 @@ export class AppComponent {
   ngOnInit(): void {
     // Load auth2 library
     gapi.load("client:auth2", this.initClient);
+    this.playlistService.getUserPlaylists().subscribe(item => {this.playlistInfo = item})
   }
 
   // Init API client library and set up sign in listeners
