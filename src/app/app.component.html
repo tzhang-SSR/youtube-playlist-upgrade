@@ -1,7 +1,10 @@
 <div *ngIf="isAuthorized; else loginForm">
   <section>
     <mat-toolbar>
-      <h1 (click)="goToHomePgae()">YTPlaylist II</h1>
+      <div class="pageHeader">
+        <img src="../assets/youtube_logo.png" alt="youtube logo" width="50" height="50" />
+        <h1 (click)="goToHomePgae()">YouTubePlaylist 2.0</h1>
+      </div>
       <ng-template [ngIf]="isAuthorized" [ngIfElse]="loggedOut">
         <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
       </ng-template>
@@ -30,11 +33,11 @@
                 <mat-icon>sort</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="sortPlaylistTitles()">
-                  <span>By Title</span>
+                <button mat-menu-item (click)="sortPlaylistByTitle()">
+                  <span>By Title (A to Z)</span>
                 </button>
-                <button mat-menu-item (click)="sortPlaylistTitles(true)">
-                  <span>By Title Reverse</span>
+                <button mat-menu-item (click)="sortPlaylistByTitle(true)">
+                  <span>By Title (Z to A)</span>
                 </button>
               </mat-menu>
             </div>

@@ -10,6 +10,7 @@ a {
 h1 {
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
+  font-weight: 600;
 }
 
 .mat-toolbar {
@@ -34,6 +35,7 @@ h1 {
 }
 
 .playlistTab div {
+  line-height: 40px;
   margin-left: 20px;
 }
 
@@ -76,4 +78,9 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.pageHeader{
+  display: flex;
+  align-items: center;
 }

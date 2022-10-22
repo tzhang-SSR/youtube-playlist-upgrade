@@ -59,6 +59,7 @@ a {
 .playlistContainer {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     text-align: center;
     justify-items: center;
     padding: 20px 15px;
@@ -69,7 +70,7 @@ a {
     margin-bottom: 20px;
 }
 
-.videoWrapper p {
+.videoTitle {
     text-align: left;
     height: 50px;
     font-size: 17px;
@@ -84,6 +85,16 @@ a {
     text-overflow: ellipsis;
 }
 
+.channelTitle a{
+    color:#606060;
+    font-size: 14px;
+}
+.editorBtn{
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    color:#606060;
+}
 .videoContent {
     position: relative;
 }
@@ -91,11 +102,11 @@ a {
 .videoContent.isEditing {
     cursor: pointer;
 }
-
-.moreBtn {
-    position: absolute;
-    bottom: 18px;
-    right: -15px;
+.videoFooter{
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .defaultThumbnail {

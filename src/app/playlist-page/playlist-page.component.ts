@@ -20,7 +20,7 @@ export class PlaylistPageComponent implements OnInit {
   SCOPES = GlobalVariables.SCOPES
   API_KEY = GlobalVariables.API_KEY
   CLIENT_ID = GlobalVariables.CLIENT_ID
-  
+
   YT_VIDEO_URL = "https://www.youtube.com/watch?v="
   PAGE_SIZE = 25;
 
@@ -41,6 +41,7 @@ export class PlaylistPageComponent implements OnInit {
   keyword = ''
   isEditing: boolean = false
   selectedVideos: any
+  newestToOldest: boolean = true
 
   constructor(private route: ActivatedRoute, private ngZone: NgZone,
     private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
@@ -48,7 +49,7 @@ export class PlaylistPageComponent implements OnInit {
     this.playlistItemsCache = []
     this.pageItems = []
     this.route.paramMap.subscribe(params => {
-      this.initializeVariables()
+      this.resetVariables()
       this.ngOnInit();
     });
   }
@@ -107,7 +108,7 @@ export class PlaylistPageComponent implements OnInit {
       });
   }
 
-  initializeVariables = () => {
+  resetVariables = () => {
     this.keyword = ''
     this.isEditing = false
     this.selectedVideos = []
@@ -139,30 +140,43 @@ export class PlaylistPageComponent implements OnInit {
       );
   }
 
+  sortPlaylistByAddedDate = (v1: any, v2: any) => {
+    return new Date(v2.snippet.publishedAt).valueOf() - new Date(v1.snippet.publishedAt).valueOf()
+  };
+
+  // fetch all video items of the current playlist
   getPlaylistItems = () => {
-    // get and store video items from the playlist
     this.ngZone.run(async () => {
-      const itemList = await this.playlistService.getPlaylistItems(this.playlistId)
-      this.playlistItems = itemList
-      this.playlistItemsCache = itemList
-      this.pageItems = itemList.slice(0, this.PAGE_SIZE)
+      let videoItemList = await this.playlistService.getPlaylistItems(this.playlistId)
+      // sort the playlist videos following this order: from the newest to the oldest
+      this.playlistItems = videoItemList.sort(this.sortPlaylistByAddedDate)
+      this.playlistItemsCache = videoItemList.sort(this.sortPlaylistByAddedDate)
+      this.pageItems = videoItemList.sort(this.sortPlaylistByAddedDate).slice(0, this.PAGE_SIZE)
       this.handlePlaylistDisplay(this.pageItems)
     })
   }
 
-  handleInitialDisplay = () => {
+  sortPlaylist = () => {
+    this.newestToOldest = !this.newestToOldest
+    this.playlistItems = this.playlistItemsCache.sort((a: any, b: any) => this.newestToOldest ? this.sortPlaylistByAddedDate(a, b) : this.sortPlaylistByAddedDate(b, a))
+    this.displayInitialPage()
+  }
+
+  displayInitialPage = () => {
     this.pageItems = this.playlistItems.slice(0, this.PAGE_SIZE)
     this.handlePlaylistDisplay(this.pageItems)
   }
 
   handlePlaylistDisplay = (items: any) => {
+    console.log({items})
     this.playlistVideos = items.map((item: any) => {
-      const { title, publishedAt, thumbnails, videoOwnerChannelTitle } = item.snippet
+      const { title, publishedAt, thumbnails, videoOwnerChannelTitle,videoOwnerChannelId } = item.snippet
+      console.log({videoOwnerChannelTitle})
       const img = thumbnails?.medium?.url
       const videoId = item.snippet?.resourceId?.videoId
       // check if any youtube video is inavaialble
       const isValid = title != 'Deleted Video' && Object.keys(thumbnails).length > 0
-      return { videoId, title, publishedAt, owner: videoOwnerChannelTitle, img, isValid, playlistItemId: item.id }
+      return { videoId, title, publishedAt, owner: videoOwnerChannelTitle, channelId: videoOwnerChannelId, img, isValid, playlistItemId: item.id }
     })
   }
 
@@ -180,7 +194,7 @@ export class PlaylistPageComponent implements OnInit {
         return item.snippet.title.toUpperCase().includes(this.keyword.toUpperCase())
       })
       this.playlistItems = result
-      this.handleInitialDisplay()
+      this.displayInitialPage()
     } else {
       this.clearSearch()
     }
@@ -189,7 +203,7 @@ export class PlaylistPageComponent implements OnInit {
   clearSearch = () => {
     this.keyword = ''
     this.playlistItems = this.playlistItemsCache
-    this.handleInitialDisplay()
+    this.displayInitialPage()
   }
 
   removeVideo = (id: string) => {

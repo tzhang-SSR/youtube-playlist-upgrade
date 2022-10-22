@@ -18,7 +18,6 @@ export class AppComponent {
   SCOPES = GlobalVariables.SCOPES
   API_KEY = GlobalVariables.API_KEY
   CLIENT_ID = GlobalVariables.CLIENT_ID
-  
 
   playlistInfo: Array<any> = [];
   GoogleAuth: any;
@@ -47,8 +46,10 @@ export class AppComponent {
       .then(() => {
         this.ngZone.run(() => {
           this.GoogleAuth = gapi.auth2.getAuthInstance();
+
           // Listen for sign-in state changes.
           this.GoogleAuth.isSignedIn.listen(this.updateSigninStatus);
+
           // Handle initial sign-in state. (Determine if user is already signed in.)
           this.setSigninStatus()
           this.loadClient()
@@ -79,14 +80,12 @@ export class AppComponent {
     })
   }
 
-  updateSigninStatus = (isSignedIn: boolean) => {
+  updateSigninStatus = () => {
     this.ngZone.run(() => {
       this.user = this.GoogleAuth.currentUser.get();
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
       if (this.isAuthorized) {
         this.getChannelInfo() //display playlist data
-      } else {
-        //do nothing
       }
     });
   }
@@ -130,7 +129,6 @@ export class AppComponent {
 
   handleSignoutClick = () => {
     this.GoogleAuth.signOut();
-    // this.GoogleAuth.disconnect();
   }
 
   openNewPlaylistDialog = () => {
@@ -140,7 +138,7 @@ export class AppComponent {
     });
   }
 
-  sortPlaylistTitles = (isReverse: boolean = false) => {
+  sortPlaylistByTitle = (isReverse: boolean = false) => {
     let arr = this.playlistInfo.sort(
       (a, b) => {
         const titleA = a.title.toUpperCase()

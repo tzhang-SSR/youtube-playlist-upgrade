@@ -2,6 +2,9 @@
 <div *ngIf="playlistItems.length || keyword.length; else emptyPlaylist">
     <div class="playlistEditor">
         <div class="editorWrapper">
+            <div (click)="sortPlaylist()">
+                <mat-icon>sort_by_alpha</mat-icon>
+            </div>
             <mat-slide-toggle [disabled]="keyword.length > 0" class="example-margin" color="warn"
                 [(ngModel)]="isEditing">
                 Edit by Group
@@ -23,7 +26,7 @@
         </div>
         <div class="search-form" *ngIf="!isEditing">
             <mat-icon matPrefix>search</mat-icon>
-            <input matInput placeholder="Type search word here..." [(ngModel)]="keyword"
+            <input matInput placeholder="Search" [(ngModel)]="keyword"
                 [ngModelOptions]="{ standalone: true }" (ngModelChange)="handleSearch()" />
             <button matSuffix *ngIf="keyword" mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
@@ -35,12 +38,17 @@
             <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
                 <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
                     <img src={{item.img}} alt={{item.title}} />
-                    <p>{{item.title}}</p>
+                    <div class="videoTitle">{{item.title}}</div>
                 </a>
-                <button class="moreBtn" mat-icon-button [matMenuTriggerFor]="menu"
-                    aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
-                </button>
+                <div class="videoFooter">
+                    <div class="channelTitle">
+                        <a target="_blank" href="https://www.youtube.com/channel/{{item.channelId}}">{{item.owner}}</a>
+                    </div>
+                    <button class="editorBtn" mat-icon-button [matMenuTriggerFor]="menu"
+                        aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="removeVideo(item.playlistItemId)">
                         <span>Remove from {{title}}</span>
