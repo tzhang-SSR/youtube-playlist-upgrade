@@ -1,0 +1,15 @@
+.loginForm {
+    padding-top: 50px;
+  }
+  
+  .formWrapper {
+    margin: 0px auto;
+    width: 500px;
+    height: 500px;
+    border: 5px solid;
+    border-radius: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }

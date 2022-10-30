@@ -32,6 +32,9 @@ export class AppComponent {
     // Load auth2 library
     gapi.load("client:auth2", this.initClient);
     this.playlistService.getUserPlaylists().subscribe(item => {this.playlistInfo = item})
+    // if (!this.isAuthorized) {
+    //   this.router.navigate(['/signin'])
+    // }
   }
 
   // Init API client library and set up sign in listeners
@@ -86,6 +89,9 @@ export class AppComponent {
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
       if (this.isAuthorized) {
         this.getChannelInfo() //display playlist data
+      }else{
+        console.log("triggered")
+        this.router.navigate(['/signin'])
       }
     });
   }
@@ -118,17 +124,9 @@ export class AppComponent {
     return items.map((item: any) => ({ title: item.snippet.title, id: item.id }))
   }
 
-  handleAuthClick = () => {
-    this.GoogleAuth.signIn({ scope: this.SCOPES })
-      .then(() => {
-        // Sign-in successful
-        console.log('Sign in successful')
-      },
-        (err: any) => { console.error("Error signing in", { err }) });
-  }
-
   handleSignoutClick = () => {
     this.GoogleAuth.signOut();
+    this.router.navigate(['/signin'])
   }
 
   openNewPlaylistDialog = () => {

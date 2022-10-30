@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlaylistPageComponent } from './playlist-page.component';
+import { SigninFormComponent } from './signin-form.component';
 
-describe('PlaylistPageComponent', () => {
-  let component: PlaylistPageComponent;
-  let fixture: ComponentFixture<PlaylistPageComponent>;
+describe('SigninFormComponent', () => {
+  let component: SigninFormComponent;
+  let fixture: ComponentFixture<SigninFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlaylistPageComponent ]
+      declarations: [ SigninFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PlaylistPageComponent);
+    fixture = TestBed.createComponent(SigninFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

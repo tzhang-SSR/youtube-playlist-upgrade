@@ -1,13 +1,10 @@
-import { Component, OnInit, NgZone } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, NgZone } from '@angular/core';
 import { PlaylistService } from '../playlist.service';
 import { MatDialog } from '@angular/material/dialog';
-import { PlaylistDialogComponent } from '../playlist-dialog/playlist-dialog.component';
-import { PlaylistDialogGroupComponent } from '../playlist-dialog-group/playlist-dialog-group.component';
-import { AddVideosDialogComponent } from '../add-videos-dialog/add-videos-dialog.component';
+import { NewPlaylistDialogComponent } from '../new-playlist-dialog/new-playlist-dialog.component';
 import { Router } from '@angular/router';
 import { GlobalVariables } from '../global-variables';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-playlist-page',
@@ -15,46 +12,28 @@ import { GlobalVariables } from '../global-variables';
   styleUrls: ['./playlist-page.component.css']
 })
 
-export class PlaylistPageComponent implements OnInit {
+export class PlaylistPageComponent {
+  title = 'youtube-playlist';
+
   DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
   SCOPES = GlobalVariables.SCOPES
   API_KEY = GlobalVariables.API_KEY
   CLIENT_ID = GlobalVariables.CLIENT_ID
 
-  YT_VIDEO_URL = "https://www.youtube.com/watch?v="
-  PAGE_SIZE = 25;
-
   playlistId: string = '';
-  playlistItems: any;
-  playlistItemsCache: any;
-  pageItems: any;
-  playlistVideos: any;
-  pageToken: string = '';
+  playlistInfo: Array<any> = [];
   GoogleAuth: any;
+  isAuthorized: boolean;
+  user: any;
 
-  title = 'Title'
-  videoCount = 0
-  status = 'Public'
-  description = 'No Description'
-  thumbnail = ''
-
-  keyword = ''
-  isEditing: boolean = false
-  selectedVideos: any
-  newestToOldest: boolean = true
-
-  constructor(private route: ActivatedRoute, private ngZone: NgZone,
-    private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
-    this.playlistItems = []
-    this.playlistItemsCache = []
-    this.pageItems = []
+  constructor(private route: ActivatedRoute, private ngZone: NgZone, private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
+    this.isAuthorized = false;
     this.route.paramMap.subscribe(params => {
-      this.resetVariables()
       this.ngOnInit();
     });
   }
 
-  handleRecirect = () => {
+  handleRedirect = () => {
     this.ngZone.run(async () => {
       const data = await this.playlistService.getPlaylists()
       const playlistItems = data.result.items
@@ -65,33 +44,17 @@ export class PlaylistPageComponent implements OnInit {
     })
   }
 
+  // Load auth2 library
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.playlistId = params.playlistId
-      // Load auth2 library
       gapi.load("client:auth2", this.initClient);
+      this.playlistService.getUserPlaylists().subscribe(item => { this.playlistInfo = item })
     })
-  }
 
-  loadClient = () => {
-    gapi.client.setApiKey(this.API_KEY);
-    return gapi.client
-      // "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"
-      .load("youtube", "v3")
-      .then(
-        () => {
-          // GAPI client loaded for API
-          if (!this.playlistId) {
-            this.handleRecirect()
-          } else {
-            this.getPlaylistInfo()
-            this.getPlaylistItems()
-          }
-        },
-        function (err) {
-          console.error("Error loading GAPI client for API", err);
-        }
-      );
+    // if (!this.isAuthorized) {
+    //   this.router.navigate(['/signin'])
+    // }
   }
 
   // Init API client library and set up sign in listeners
@@ -104,174 +67,112 @@ export class PlaylistPageComponent implements OnInit {
         scope: this.SCOPES,
       })
       .then(() => {
-        this.loadClient()
+        this.ngZone.run(() => {
+          this.GoogleAuth = gapi.auth2.getAuthInstance();
+
+          // Listen for sign-in state changes.
+          this.GoogleAuth.isSignedIn.listen(this.updateSigninStatus);
+
+          // Handle initial sign-in state. (Determine if user is already signed in.)
+          this.setSigninStatus()
+          this.loadClient()
+        })
       });
   }
 
-  resetVariables = () => {
-    this.keyword = ''
-    this.isEditing = false
-    this.selectedVideos = []
+
+  // "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"
+  loadClient = () => {
+    gapi.client.setApiKey(this.API_KEY);
+    return gapi.client
+      .load("youtube", "v3")
+      .then(
+        () => {
+          if (!this.playlistId) {
+            this.handleRedirect()
+          }
+        },
+        function (err) {
+          console.error("Error loading GAPI client for API", err);
+        }
+      );
   }
 
-  getPlaylistInfo() {
-    //https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
-    gapi.client.youtube.playlists
+  setSigninStatus = () => {
+    this.ngZone.run(() => {
+      this.user = this.GoogleAuth.currentUser.get();
+      this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
+      this.getChannelInfo()
+    })
+  }
+
+  updateSigninStatus = () => {
+    this.ngZone.run(() => {
+      this.user = this.GoogleAuth.currentUser.get();
+      this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
+      if (this.isAuthorized) {
+        this.getChannelInfo() //display playlist data
+      } else {
+        this.router.navigate(['/signin'])
+      }
+    });
+  }
+
+  getChannelInfo() {
+    //https://developers.google.com/youtube/v3/docs/channels/list?apix=true
+    gapi.client.youtube.channels
       .list({
-        part: ["snippet, contentDetails, status"],
-        id: this.playlistId,
+        part: ["snippet,contentDetails,statistics"],
+        mine: true,
       })
       .then(
-        (response: any) => {
-          this.ngZone.run(() => {
-            // Handle the results here (response.result has the parsed body).
-            const { snippet, status, contentDetails } = response.result.items[0]
-            this.videoCount = contentDetails.itemCount
-            this.status = status.privacyStatus || 'Public'
-            const { title, description, thumbnails } = snippet
-            this.title = title || 'Title'
-            this.description = description || ' No Description'
-            this.thumbnail = thumbnails.medium.url || ''
-          })
+        () => {
+          this.ngZone.run(() => { this.getPlaylist(); })
         },
-        (err: any) => {
+        function (err: any) {
           console.error("Execute error", err);
         }
       );
   }
 
-  sortPlaylistByAddedDate = (v1: any, v2: any) => {
-    return new Date(v2.snippet.publishedAt).valueOf() - new Date(v1.snippet.publishedAt).valueOf()
-  };
-
-  // fetch all video items of the current playlist
-  getPlaylistItems = () => {
+  getPlaylist() {
     this.ngZone.run(async () => {
-      let videoItemList = await this.playlistService.getPlaylistItems(this.playlistId)
-      // sort the playlist videos following this order: from the newest to the oldest
-      this.playlistItems = videoItemList.sort(this.sortPlaylistByAddedDate)
-      this.playlistItemsCache = videoItemList.sort(this.sortPlaylistByAddedDate)
-      this.pageItems = videoItemList.sort(this.sortPlaylistByAddedDate).slice(0, this.PAGE_SIZE)
-      this.handlePlaylistDisplay(this.pageItems)
+      const response = await this.playlistService.getPlaylists()
+      this.playlistInfo = this.formatPlaylistInfo(response?.result.items)
     })
   }
 
-  sortPlaylist = () => {
-    this.newestToOldest = !this.newestToOldest
-    this.playlistItems = this.playlistItemsCache.sort((a: any, b: any) => this.newestToOldest ? this.sortPlaylistByAddedDate(a, b) : this.sortPlaylistByAddedDate(b, a))
-    this.displayInitialPage()
+  formatPlaylistInfo = (items: any) => {
+    return items.map((item: any) => ({ title: item.snippet.title, id: item.id }))
   }
 
-  displayInitialPage = () => {
-    this.pageItems = this.playlistItems.slice(0, this.PAGE_SIZE)
-    this.handlePlaylistDisplay(this.pageItems)
+  handleSignoutClick = () => {
+    this.GoogleAuth.signOut();
+    // this.router.navigate(['/signin'])
   }
 
-  handlePlaylistDisplay = (items: any) => {
-    console.log({items})
-    this.playlistVideos = items.map((item: any) => {
-      const { title, publishedAt, thumbnails, videoOwnerChannelTitle,videoOwnerChannelId } = item.snippet
-      console.log({videoOwnerChannelTitle})
-      const img = thumbnails?.medium?.url
-      const videoId = item.snippet?.resourceId?.videoId
-      // check if any youtube video is inavaialble
-      const isValid = title != 'Deleted Video' && Object.keys(thumbnails).length > 0
-      return { videoId, title, publishedAt, owner: videoOwnerChannelTitle, channelId: videoOwnerChannelId, img, isValid, playlistItemId: item.id }
-    })
-  }
-
-  onPageChange = (event: PageEvent) => {
-    const pageIndex = event.pageIndex * this.PAGE_SIZE
-    this.pageItems = this.playlistItems.slice(pageIndex, pageIndex + this.PAGE_SIZE)
-    this.handlePlaylistDisplay(this.pageItems)
-    window.scroll({ top: 0 });
-  }
-
-  handleSearch = () => {
-    this.isEditing = false
-    if (this.keyword) {
-      const result = this.playlistItemsCache.filter((item: any) => {
-        return item.snippet.title.toUpperCase().includes(this.keyword.toUpperCase())
-      })
-      this.playlistItems = result
-      this.displayInitialPage()
-    } else {
-      this.clearSearch()
-    }
-  }
-
-  clearSearch = () => {
-    this.keyword = ''
-    this.playlistItems = this.playlistItemsCache
-    this.displayInitialPage()
-  }
-
-  removeVideo = (id: string) => {
-    this.playlistService.deleteVideofromPlaylist(id)
-    window.location.reload()
-  }
-
-  openDialog = (videoId: string) => {
-    const dialogRef = this.dialog.open(PlaylistDialogComponent, { data: { videoId } })
-    dialogRef.afterClosed().subscribe(result => {
+  openNewPlaylistDialog = () => {
+    const dialogRef = this.dialog.open(NewPlaylistDialogComponent)
+    dialogRef.afterClosed().subscribe(() => {
       window.location.reload()
     });
   }
 
-  findVideoIdByItemId = (itemId: string) => {
-    const videoItem = this.playlistItemsCache.find((item: any) => item.id == itemId)
-    return videoItem.snippet?.resourceId?.videoId
-  }
-
-  getVideoIdList = () => {
-    const videoIdList = this.selectedVideos.map((id: any) => this.findVideoIdByItemId(id))
-    return [...new Set(videoIdList)]
-  }
-
-  isVideoSelected = (videoId: string): boolean => {
-    return this.selectedVideos.includes(videoId)
-  }
-
-  handleVideoSelecton = (videoId: string) => {
-    let arr = []
-    const isSelected = this.isVideoSelected(videoId)
-    if (isSelected) {
-      arr = this.selectedVideos.filter((e: string) => e != videoId)
-    } else {
-      arr = [...this.selectedVideos, videoId]
-    }
-    this.selectedVideos = arr
-  }
-
-  openGroupDialog = (removeVideos: boolean = false) => {
-    const videoIdList = this.getVideoIdList()
-    const playlistVideoIdList = this.selectedVideos
-
-    const dialogRef = this.dialog.open(PlaylistDialogGroupComponent,
-      { data: { videoIdList, playlistVideoIdList, removeVideos } })
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (removeVideos) {
-        window.location.reload()
+  sortPlaylistByTitle = (isReverse: boolean = false) => {
+    let arr = this.playlistInfo.sort(
+      (a, b) => {
+        const titleA = a.title.toUpperCase()
+        const titleB = b.title.toUpperCase()
+        if (titleA < titleB) { return isReverse ? 1 : -1 }
+        if (titleA > titleB) { return isReverse ? -1 : 1 }
+        return 0
       }
-    });
+    )
+    this.playlistInfo = arr
   }
 
-  deleteByGroup = async () => {
-    for (const id of this.selectedVideos) {
-      // const videoItemId = this.playlistItemsCache.find((item: any) => item.snippet.resourceId.videoId == id).id
-      await this.playlistService.deleteVideofromPlaylist(id)
-    }
-    window.location.reload()
-  }
-
-  openNewVideoDialog = () => {
-    const dialogRef = this.dialog.open(AddVideosDialogComponent,
-      { data: { playlistId: this.playlistId } })
-
-    dialogRef.afterClosed().subscribe(result => {
-      window.location.reload()
-    });
+  goToHomePgae = () => {
+    this.router.navigate(['/'])
   }
 
 }

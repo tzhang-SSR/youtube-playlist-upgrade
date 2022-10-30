@@ -22,6 +22,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { PlaylistDialogGroupComponent } from './playlist-dialog-group/playlist-dialog-group.component';
 import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-dialog.component';
 import { AddVideosDialogComponent } from './add-videos-dialog/add-videos-dialog.component';
+import { SigninFormComponent } from './signin-form/signin-form.component';
+import { PlaylistPageContentComponent } from './playlist-page-content/playlist-page-content.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { AddVideosDialogComponent } from './add-videos-dialog/add-videos-dialog.
     PlaylistHeaderComponent,
     PlaylistDialogGroupComponent,
     NewPlaylistDialogComponent,
-    AddVideosDialogComponent
+    AddVideosDialogComponent,
+    SigninFormComponent,
+    PlaylistPageContentComponent
   ],
   imports: [
     BrowserModule,

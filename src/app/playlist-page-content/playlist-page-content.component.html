@@ -1,0 +1,107 @@
+<app-playlist-header [playlistId]="playlistId"></app-playlist-header>
+<div *ngIf="playlistItems.length || keyword.length; else emptyPlaylist">
+    <div class="playlistEditor">
+        <div class="editorWrapper">
+            <div (click)="sortPlaylist()">
+                <mat-icon>sort_by_alpha</mat-icon>
+            </div>
+            <mat-slide-toggle [disabled]="keyword.length > 0" class="example-margin" color="warn"
+                [(ngModel)]="isEditing">
+                Edit by Group
+            </mat-slide-toggle>
+            <div class="operationList" *ngIf="selectedVideos.length > 0">
+                <div class="iconWrapper" (click)="deleteByGroup()">
+                    <mat-icon>delete</mat-icon>
+                    <div>Delete</div>
+                </div>
+                <div class="iconWrapper" (click)="openGroupDialog()">
+                    <mat-icon>file_copy</mat-icon>
+                    <div>Copy</div>
+                </div>
+                <!-- <div class="iconWrapper" (click)="openGroupDialog(true)">
+                    <mat-icon>folder_special</mat-icon>
+                    <div>Move</div>
+                </div> -->
+            </div>
+        </div>
+        <div class="search-form" *ngIf="!isEditing">
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput placeholder="Search" [(ngModel)]="keyword"
+                [ngModelOptions]="{ standalone: true }" (ngModelChange)="handleSearch()" />
+            <button matSuffix *ngIf="keyword" mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="!isEditing; else editingMode" class="playlistContainer">
+        <div class="videoWrapper" *ngFor="let item of playlistVideos">
+            <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
+                <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
+                    <img src={{item.img}} alt={{item.title}} />
+                    <div class="videoTitle">{{item.title}}</div>
+                </a>
+                <div class="videoFooter">
+                    <div class="channelTitle">
+                        <a target="_blank" href="https://www.youtube.com/channel/{{item.channelId}}">{{item.owner}}</a>
+                    </div>
+                    <button class="editorBtn" mat-icon-button [matMenuTriggerFor]="menu"
+                        aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="removeVideo(item.playlistItemId)">
+                        <span>Remove from {{title}}</span>
+                    </button>
+                    <button mat-menu-item (click)="openDialog(item.videoId)">
+                        <span>Save to playlist</span>
+                    </button>
+                </mat-menu>
+            </div>
+            <ng-template #invalidVideo>
+                <div class="defaultThumbnail">Video Unavailable</div>
+                <p>{{item.title}}</p>
+            </ng-template>
+        </div>
+        <div *ngIf="!playlistItems.length && keyword.length">
+            <h3>No videos found. Try another keyword</h3>
+        </div>
+    </div>
+    <ng-template #editingMode>
+        <div class="playlistContainer">
+            <div class="videoWrapper" *ngFor="let item of playlistVideos">
+                <div *ngIf="item.isValid; else invalidVideo" class="videoContent isEditing"
+                    (click)="handleVideoSelecton(item.playlistItemId)">
+                    <img src={{item.img}} alt={{item.title}} />
+                    <p>{{item.title}}</p>
+                    <mat-icon *ngIf="isVideoSelected(item.playlistItemId); else uncheckIcon" class="icon-checked">
+                        check_circle
+                    </mat-icon>
+                    <ng-template #uncheckIcon>
+                        <mat-icon class="icon-checked">
+                            check_circle_outline
+                        </mat-icon>
+                    </ng-template>
+                </div>
+                <ng-template #invalidVideo>
+                    <div class="defaultThumbnail">Video Unavailable</div>
+                    <p>{{item.title}}</p>
+                </ng-template>
+            </div>
+        </div>
+    </ng-template>
+    <mat-paginator *ngIf="playlistItems.length > PAGE_SIZE" [length]="playlistItems.length" [pageSize]="PAGE_SIZE"
+        aria-label="Select page" (page)="onPageChange($event)" class="paginator-wrapper">
+    </mat-paginator>
+</div>
+<ng-template #emptyPlaylist>
+    <div class="emptyPlaylist">
+        <h3>No videos found in this playlist</h3>
+        <button mat-raised-button color="warn" (click)="openNewVideoDialog()">Add One</button>
+    </div>
+</ng-template>
+<ng-template #zeroSearchResult>
+    <div class="emptyPlaylist">
+        <h3>No videos found. Try another keyword</h3>
+    </div>
+</ng-template>
