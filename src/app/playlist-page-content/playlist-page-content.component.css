@@ -70,6 +70,10 @@ a {
     margin-bottom: 20px;
 }
 
+.videoWrapper img{
+    border-radius: 8px;
+}
+
 .videoTitle {
     text-align: left;
     height: 50px;
@@ -97,6 +101,7 @@ a {
 }
 .videoContent {
     position: relative;
+    border-radius: 12px;
 }
 
 .videoContent.isEditing {
