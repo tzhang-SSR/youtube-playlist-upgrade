@@ -26,8 +26,8 @@
         </div>
         <div class="search-form" *ngIf="!isEditing">
             <mat-icon matPrefix>search</mat-icon>
-            <input matInput placeholder="Search" [(ngModel)]="keyword"
-                [ngModelOptions]="{ standalone: true }" (ngModelChange)="handleSearch()" />
+            <input matInput placeholder="Search" [(ngModel)]="keyword" [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="handleSearch()" />
             <button matSuffix *ngIf="keyword" mat-icon-button aria-label="Clear" (click)="clearSearch()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -73,7 +73,12 @@
                 <div *ngIf="item.isValid; else invalidVideo" class="videoContent isEditing"
                     (click)="handleVideoSelecton(item.playlistItemId)">
                     <img src={{item.img}} alt={{item.title}} />
-                    <p>{{item.title}}</p>
+                    <div class="videoTitle">{{item.title}}</div>
+                    <div class="videoFooter">
+                        <div class="channelTitle">
+                            {{item.owner}}
+                        </div>
+                    </div>
                     <mat-icon *ngIf="isVideoSelected(item.playlistItemId); else uncheckIcon" class="icon-checked">
                         check_circle
                     </mat-icon>

@@ -76,7 +76,7 @@ a {
 
 .videoTitle {
     text-align: left;
-    height: 50px;
+    /* height: 50px; */
     font-size: 17px;
     line-height: 25px;
     font-weight: 500;
@@ -89,10 +89,16 @@ a {
     text-overflow: ellipsis;
 }
 
+.channelTitle{
+    text-align: left;
+    color:#606060;
+}
+
 .channelTitle a{
     color:#606060;
     font-size: 14px;
 }
+
 .editorBtn{
     width: 25px;
     height: 25px;
@@ -111,7 +117,6 @@ a {
     margin-top: 5px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
 .defaultThumbnail {
