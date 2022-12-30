@@ -38,16 +38,20 @@
             <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
                 <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
                     <img src={{item.img}} alt={{item.title}} />
-                    <div class="videoTitle">{{item.title}}</div>
                 </a>
-                <div class="videoFooter">
-                    <div class="channelTitle">
-                        <a target="_blank" href="https://www.youtube.com/channel/{{item.channelId}}">{{item.owner}}</a>
-                    </div>
+                <div class="videoTitleSection">
+                    <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
+                        <div class="videoTitle">{{item.title}}</div>
+                    </a>
                     <button class="editorBtn" mat-icon-button [matMenuTriggerFor]="menu"
                         aria-label="Example icon-button with a menu">
                         <mat-icon>more_vert</mat-icon>
                     </button>
+                </div>
+                <div class="videoFooter">
+                    <div class="channelTitle">
+                        <a target="_blank" href="https://www.youtube.com/channel/{{item.channelId}}">{{item.owner}}</a>
+                    </div>
                 </div>
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="removeVideo(item.playlistItemId)">

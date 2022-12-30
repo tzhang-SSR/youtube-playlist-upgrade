@@ -67,16 +67,20 @@ a {
 
 .videoWrapper {
     max-width: 320px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .videoWrapper img{
     border-radius: 8px;
 }
 
+.videoTitleSection{
+    display:grid;
+    grid-template-columns: 1fr 25px;
+}
+
 .videoTitle {
     text-align: left;
-    /* height: 50px; */
     font-size: 17px;
     line-height: 25px;
     font-weight: 500;
@@ -100,8 +104,6 @@ a {
 }
 
 .editorBtn{
-    width: 25px;
-    height: 25px;
     line-height: 25px;
     color:#606060;
 }
