@@ -1,0 +1,61 @@
+.playlist-sidebar {
+    max-height: 100vh;
+    overflow-y: scroll;
+    position: fixed;
+
+}
+
+.playlistItems {
+    display: flex;
+    flex-direction: column;
+    border-top: none;
+    width: 225px;
+    padding: none;
+}
+
+.playlist-sidebar .playlistTab {
+    display: flex;
+    align-items: center;
+    min-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlistTab {
+    padding: 0 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.playlistTab:hover {
+    background-color: #eee;
+}
+
+.playlistTab>div {
+    margin-left: 20px;
+}
+
+.noPlaylist {
+    text-align: center;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+
+.playlist-sidebar:hover::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* overwrite angular material component css */
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
+.mat-button-toggle-group-appearance-standard {
+    border: none;
+}

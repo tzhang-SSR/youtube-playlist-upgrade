@@ -24,6 +24,7 @@ import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-d
 import { AddVideosDialogComponent } from './add-videos-dialog/add-videos-dialog.component';
 import { SigninFormComponent } from './signin-form/signin-form.component';
 import { PlaylistPageContentComponent } from './playlist-page-content/playlist-page-content.component';
+import { PlaylistSidebarComponent } from './playlist-sidebar/playlist-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { PlaylistPageContentComponent } from './playlist-page-content/playlist-p
     NewPlaylistDialogComponent,
     AddVideosDialogComponent,
     SigninFormComponent,
-    PlaylistPageContentComponent
+    PlaylistPageContentComponent,
+    PlaylistSidebarComponent
   ],
   imports: [
     BrowserModule,

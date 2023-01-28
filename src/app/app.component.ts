@@ -11,9 +11,12 @@ import { GlobalVariables } from './global-variables';
   styleUrls: ['./app.component.css']
 })
 
+
+
 export class AppComponent {
+  // type color = 'red';
   title = 'youtube-playlist';
-  
+
   DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
   SCOPES = GlobalVariables.SCOPES
   API_KEY = GlobalVariables.API_KEY
@@ -24,6 +27,8 @@ export class AppComponent {
   isAuthorized: boolean;
   user: any;
 
+  sortOrder: string = 'default'
+
   constructor(private ngZone: NgZone, private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
     this.isAuthorized = false;
   }
@@ -31,10 +36,7 @@ export class AppComponent {
   ngOnInit(): void {
     // Load auth2 library
     gapi.load("client:auth2", this.initClient);
-    this.playlistService.getUserPlaylists().subscribe(item => {this.playlistInfo = item})
-    // if (!this.isAuthorized) {
-    //   this.router.navigate(['/signin'])
-    // }
+    this.playlistService.getUserPlaylists().subscribe(item => { this.playlistInfo = item })
   }
 
   // Init API client library and set up sign in listeners
@@ -89,7 +91,7 @@ export class AppComponent {
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
       if (this.isAuthorized) {
         this.getChannelInfo() //display playlist data
-      }else{
+      } else {
         console.log("triggered")
         this.router.navigate(['/signin'])
       }
@@ -136,17 +138,8 @@ export class AppComponent {
     });
   }
 
-  sortPlaylistByTitle = (isReverse: boolean = false) => {
-    let arr = this.playlistInfo.sort(
-      (a, b) => {
-        const titleA = a.title.toUpperCase()
-        const titleB = b.title.toUpperCase()
-        if (titleA < titleB) { return isReverse ? 1 : -1 }
-        if (titleA > titleB) { return isReverse ? -1 : 1 }
-        return 0
-      }
-    )
-    this.playlistInfo = arr
+  setSortOrder = (sortOrder: string) => {
+    this.sortOrder = sortOrder
   }
 
   goToHomePgae = () => {

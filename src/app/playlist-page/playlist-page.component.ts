@@ -5,6 +5,7 @@ import { NewPlaylistDialogComponent } from '../new-playlist-dialog/new-playlist-
 import { Router } from '@angular/router';
 import { GlobalVariables } from '../global-variables';
 import { ActivatedRoute } from '@angular/router';
+import { PlaylistSidebarComponent } from '../playlist-sidebar/playlist-sidebar.component';
 
 @Component({
   selector: 'app-playlist-page',
@@ -51,10 +52,6 @@ export class PlaylistPageComponent {
       gapi.load("client:auth2", this.initClient);
       this.playlistService.getUserPlaylists().subscribe(item => { this.playlistInfo = item })
     })
-
-    // if (!this.isAuthorized) {
-    //   this.router.navigate(['/signin'])
-    // }
   }
 
   // Init API client library and set up sign in listeners
@@ -158,21 +155,21 @@ export class PlaylistPageComponent {
     });
   }
 
-  sortPlaylistByTitle = (isReverse: boolean = false) => {
-    let arr = this.playlistInfo.sort(
-      (a, b) => {
-        const titleA = a.title.toUpperCase()
-        const titleB = b.title.toUpperCase()
-        if (titleA < titleB) { return isReverse ? 1 : -1 }
-        if (titleA > titleB) { return isReverse ? -1 : 1 }
-        return 0
-      }
-    )
-    this.playlistInfo = arr
-  }
+  // sortPlaylistByTitle = (isReverse: boolean = false) => {
+  //   let arr = this.playlistInfo.sort(
+  //     (a, b) => {
+  //       const titleA = a.title.toUpperCase()
+  //       const titleB = b.title.toUpperCase()
+  //       if (titleA < titleB) { return isReverse ? 1 : -1 }
+  //       if (titleA > titleB) { return isReverse ? -1 : 1 }
+  //       return 0
+  //     }
+  //   )
+  //   this.playlistInfo = arr
+  // }
 
-  goToHomePgae = () => {
-    this.router.navigate(['/'])
-  }
+  // goToHomePgae = () => {
+  //   this.router.navigate(['/'])
+  // }
 
 }
