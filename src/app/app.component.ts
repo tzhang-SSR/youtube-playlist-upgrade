@@ -138,12 +138,12 @@ export class AppComponent {
     });
   }
 
-  setSortOrder = (sortOrder: string) => {
-    this.sortOrder = sortOrder
-  }
+  // setSortOrder = (sortOrder: string) => {
+  //   this.sortOrder = sortOrder
+  // }
 
-  goToHomePgae = () => {
-    this.router.navigate(['/'])
-  }
+  // goToHomePgae = () => {
+  //   this.router.navigate(['/'])
+  // }
 
 }

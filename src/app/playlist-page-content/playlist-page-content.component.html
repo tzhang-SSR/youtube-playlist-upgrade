@@ -36,11 +36,11 @@
     <div *ngIf="!isEditing; else editingMode" class="playlistContainer">
         <div class="videoWrapper" *ngFor="let item of playlistVideos">
             <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
-                <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
+                <a target="_blank" href="{{VIDEO_URL_PREFIX}}{{item.videoId}}">
                     <img src={{item.img}} alt={{item.title}} />
                 </a>
                 <div class="videoTitleSection">
-                    <a target="_blank" href="{{YT_VIDEO_URL}}{{item.videoId}}">
+                    <a target="_blank" href="{{VIDEO_URL_PREFIX}}{{item.videoId}}">
                         <div class="videoTitle">{{item.title}}</div>
                     </a>
                     <button class="editorBtn" mat-icon-button [matMenuTriggerFor]="menu"

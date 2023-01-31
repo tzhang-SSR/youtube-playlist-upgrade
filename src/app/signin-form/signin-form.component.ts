@@ -67,6 +67,10 @@ export class SigninFormComponent implements OnInit {
     this.ngZone.run(() => {
       this.user = this.GoogleAuth.currentUser.get();
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
+      // redirect user to the playlist page if they are already signed in
+      if (this.isAuthorized) {
+        this.router.navigate(['/playlist'])
+      }
     })
   }
 

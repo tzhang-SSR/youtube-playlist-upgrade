@@ -1,15 +1,15 @@
 <div class="playlist-sidebar">
     <mat-button-toggle-group name="fontStyle" aria-label="playlist name list" class="playlistItems"
-        *ngIf="playlistInfo.length; else noPlaylist">
-        <mat-button-toggle *ngFor="let item of playlistInfo">
-            <a routerLink="/playlist/{{item.id}}" class="playlistTab">
+        *ngIf="playlistInfo.length; else emptyPlaceholder">
+        <mat-button-toggle *ngFor="let item of playlistInfo" class="playlistTab">
+            <a routerLink="/playlist/{{item.id}}" class="tabLink">
                 <mat-icon>playlist_play</mat-icon>
                 <div>{{item.title}}</div>
             </a>
         </mat-button-toggle>
     </mat-button-toggle-group>
-    <ng-template #noPlaylist>
-        <div class="noPlaylist">
+    <ng-template #emptyPlaceholder>
+        <div class="emptyPlaceholder">
             <p>No playlist found</p>
             <p>Create one to start</p>
             <div (click)="openNewPlaylistDialog()">

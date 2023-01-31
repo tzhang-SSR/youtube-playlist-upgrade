@@ -25,6 +25,7 @@ import { AddVideosDialogComponent } from './add-videos-dialog/add-videos-dialog.
 import { SigninFormComponent } from './signin-form/signin-form.component';
 import { PlaylistPageContentComponent } from './playlist-page-content/playlist-page-content.component';
 import { PlaylistSidebarComponent } from './playlist-sidebar/playlist-sidebar.component';
+import { AuthGuard } from 'src/guard';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { PlaylistSidebarComponent } from './playlist-sidebar/playlist-sidebar.co
     MatProgressSpinnerModule,
     MatSlideToggleModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -23,7 +23,7 @@ export class PlaylistPageContentComponent implements OnInit {
   API_KEY = GlobalVariables.API_KEY
   CLIENT_ID = GlobalVariables.CLIENT_ID
 
-  YT_VIDEO_URL = "https://www.youtube.com/watch?v="
+  VIDEO_URL_PREFIX = "https://www.youtube.com/watch?v="
   PAGE_SIZE = 25;
 
   @Input() playlistId!: string;

@@ -68,15 +68,25 @@ a {
 .videoWrapper {
     max-width: 320px;
     margin-bottom: 40px;
-}
-
-.videoWrapper img{
+    transition: transform .2s;
     border-radius: 8px;
 }
 
-.videoTitleSection{
-    display:grid;
+.videoWrapper:hover {
+    transform: scale(1.15);
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.videoWrapper img {
+    border-radius: 8px;
+}
+
+.videoTitleSection {
+    display: grid;
     grid-template-columns: 1fr 25px;
+    padding: 0 15px;
 }
 
 .videoTitle {
@@ -93,20 +103,21 @@ a {
     text-overflow: ellipsis;
 }
 
-.channelTitle{
+.channelTitle {
     text-align: left;
-    color:#606060;
+    color: #606060;
 }
 
-.channelTitle a{
-    color:#606060;
+.channelTitle a {
+    color: #606060;
     font-size: 14px;
 }
 
-.editorBtn{
+.editorBtn {
     line-height: 25px;
-    color:#606060;
+    color: #606060;
 }
+
 .videoContent {
     position: relative;
     border-radius: 12px;
@@ -115,10 +126,13 @@ a {
 .videoContent.isEditing {
     cursor: pointer;
 }
-.videoFooter{
-    margin-top: 5px;
+
+.videoFooter {
+    margin: 5px 0;
     display: flex;
     justify-content: space-between;
+    padding: 0 15px;
+
 }
 
 .defaultThumbnail {

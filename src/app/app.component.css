@@ -13,19 +13,3 @@
   margin-left: 5px;
   font-weight: bold;
 }
-
-.pageContent {
-  display: grid;
-  grid-template-columns: 225px 1fr;
-}
-
-.sidebarHeader {
-  display: flex;
-  justify-content: space-center;
-
-}
-
-.sidebarHeader div {
-  line-height: 40px;
-  margin-left: 20px;
-}

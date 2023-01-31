@@ -2,41 +2,39 @@
     max-height: 100vh;
     overflow-y: scroll;
     position: fixed;
-
 }
 
 .playlistItems {
     display: flex;
     flex-direction: column;
     border-top: none;
-    width: 225px;
+    width: 100%;
     padding: none;
 }
 
-.playlist-sidebar .playlistTab {
+.tabLink {
     display: flex;
     align-items: center;
-    min-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.playlistTab {
     padding: 0 10px;
     border-radius: 10px;
     cursor: pointer;
+    width: 180px;
 }
 
-.playlistTab:hover {
+.tabLink:hover {
     background-color: #eee;
 }
 
-.playlistTab>div {
+.tabLink div {
     margin-left: 20px;
 }
 
-.noPlaylist {
+
+.emptyPlaceholder {
     text-align: center;
+    width: 225px;
 }
 
 ::-webkit-scrollbar {
@@ -58,4 +56,9 @@
 .mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
 .mat-button-toggle-group-appearance-standard {
     border: none;
+}
+
+.mat-button-toggle-button {
+    text-align: left;
+    width: auto;
 }

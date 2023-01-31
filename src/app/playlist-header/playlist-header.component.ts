@@ -74,7 +74,7 @@ export class PlaylistHeaderComponent implements OnInit {
     this.ngZone.run(async () => {
       const response = await this.playlistService.getPlaylistInfo(this.playlistId)
       // Handle the results here (response.result has the parsed body).
-      if (response.result.items) {
+      if (response?.result?.items) {
         const { snippet, status, contentDetails } = response.result.items[0]
         this.videoCount = contentDetails?.itemCount || 0
         this.status = status?.privacyStatus || 'Public'

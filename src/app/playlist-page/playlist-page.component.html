@@ -1,5 +1,40 @@
+<mat-toolbar>
+  <div class="pageHeader">
+    <img src="../assets/youtube_logo.png" alt="youtube logo" width="40" height="40" />
+    <h1>YouTubePlaylist 2.0</h1>
+  </div>
+  <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
+</mat-toolbar>
 <section>
-  <div class="playlist-content">
+  <div class="pageContent">
+    <div class="sidebarWrapper">
+      <div class="sidebarHeader">
+        <div>
+          <button mat-icon-button (click)="goToHomePgae()">
+            <mat-icon>home</mat-icon>
+          </button>
+        </div>
+        <div (click)="openNewPlaylistDialog()">
+          <button mat-icon-button>
+            <mat-icon>library_add</mat-icon>
+          </button>
+        </div>
+        <div>
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="sort-icon-button with a menu">
+            <mat-icon>sort</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="setSortOrder('asc')">
+              <span>By Title <i>(A to Z)</i></span>
+            </button>
+            <button mat-menu-item (click)="setSortOrder('desc')">
+              <span>By Title <i>(Z to A)</i></span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+      <app-playlist-sidebar [sortOrder]="sortOrder" [playlistInfo]="playlistInfo"></app-playlist-sidebar>
+    </div>
     <app-playlist-page-content [playlistId]="playlistId"></app-playlist-page-content>
   </div>
 </section>
