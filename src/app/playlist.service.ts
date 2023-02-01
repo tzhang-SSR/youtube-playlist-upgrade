@@ -5,6 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class PlaylistService {
   DISCOVERY_DOCS = GlobalVariables.DISCOVERY_DOCS;
   SCOPES = GlobalVariables.SCOPES
