@@ -92,7 +92,6 @@ export class AppComponent {
       if (this.isAuthorized) {
         this.getChannelInfo() //display playlist data
       } else {
-        console.log("triggered")
         this.router.navigate(['/signin'])
       }
     });

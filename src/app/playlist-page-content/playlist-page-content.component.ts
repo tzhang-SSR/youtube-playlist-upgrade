@@ -171,10 +171,8 @@ export class PlaylistPageContentComponent implements OnInit {
   }
 
   handlePlaylistDisplay = (items: any) => {
-    console.log({ items })
     this.playlistVideos = items.map((item: any) => {
       const { title, publishedAt, thumbnails, videoOwnerChannelTitle, videoOwnerChannelId } = item.snippet
-      console.log({ videoOwnerChannelTitle })
       const img = thumbnails?.medium?.url
       const videoId = item.snippet?.resourceId?.videoId
       // check if any youtube video is inavaialble
