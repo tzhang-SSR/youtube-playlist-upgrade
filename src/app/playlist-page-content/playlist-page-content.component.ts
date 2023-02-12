@@ -114,6 +114,7 @@ export class PlaylistPageContentComponent implements OnInit {
   resetVariables = () => {
     this.keyword = ''
     this.isEditing = false
+    this.newestToOldest = true
     this.selectedVideos = []
   }
 

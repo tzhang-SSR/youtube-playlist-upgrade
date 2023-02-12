@@ -1,161 +1,173 @@
 a {
-    text-decoration: none;
-    color: #000;
+  text-decoration: none;
+  color: #000;
 }
 
 .search-form {
-    display: flex;
-    height: 24px;
-    align-items: center;
-    width: 230px;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 5px 10px;
-    margin-left: 15px;
+  display: flex;
+  height: 24px;
+  align-items: center;
+  width: 230px;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin-left: 15px;
 }
 
 .search-form input {
-    background-color: inherit;
-    border: none;
-    outline: none;
+  background-color: inherit;
+  border: none;
+  outline: none;
 }
 
 .playlistEditor {
-    display: flex;
-    margin: 15px;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    align-items: center;
-    padding-bottom: 5px;
-    height: 24px;
+  display: flex;
+  margin: 15px;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+  padding-bottom: 10px;
+  height: 40px;
 }
 
 .editorWrapper {
-    display: flex;
+  display: flex;
+}
+
+.editorWrapper .mat-slide-toggle {
+  margin-right: 15px;
+  min-height: 36px;
 }
 
 .editorWrapper .operationList {
-    display: flex;
+  display: flex;
 }
 
 .editorWrapper .iconWrapper {
-    margin-left: 30px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+  margin-left: 30px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .editorWrapper .iconWrapper>div {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .paginator-wrapper {
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
 }
 
 
 .playlistContainer {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    text-align: center;
-    justify-items: center;
-    padding: 20px 15px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  text-align: center;
+  justify-items: center;
+  padding: 20px 15px;
 }
 
-.videoWrapper {
-    max-width: 320px;
-    margin-bottom: 40px;
-    transition: transform .2s;
-    border-radius: 8px;
+.videoWrapper,
+.videoWrapper-editing {
+  max-width: 320px;
+  margin-bottom: 40px;
+  transition: transform .2s;
+  border-radius: 8px;
+}
+
+.videoWrapper img,
+.videoWrapper-editing img {
+  border-radius: 8px;
 }
 
 .videoWrapper:hover {
-    transform: scale(1.15);
-    z-index: 999;
-    background-color: #fff;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.15);
+  z-index: 999;
+  background-color: #fff;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
-.videoWrapper img {
-    border-radius: 8px;
+.videoWrapper-editing:hover {
+  opacity: 0.6;
 }
+
 
 .videoTitleSection {
-    display: grid;
-    grid-template-columns: 1fr 25px;
-    padding: 0 15px;
+  display: grid;
+  grid-template-columns: 1fr 25px;
+  padding: 0 15px;
 }
 
 .videoTitle {
-    text-align: left;
-    font-size: 17px;
-    line-height: 25px;
-    font-weight: 500;
-    padding-right: 15px;
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
+  text-align: left;
+  font-size: 17px;
+  line-height: 25px;
+  font-weight: 500;
+  padding-right: 15px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 }
 
 .channelTitle {
-    text-align: left;
-    color: #606060;
+  text-align: left;
+  color: #606060;
 }
 
 .channelTitle a {
-    color: #606060;
-    font-size: 14px;
+  color: #606060;
+  font-size: 14px;
 }
 
 .editorBtn {
-    line-height: 25px;
-    color: #606060;
+  line-height: 25px;
+  color: #606060;
 }
 
 .videoContent {
-    position: relative;
-    border-radius: 12px;
+  position: relative;
+  border-radius: 12px;
 }
 
 .videoContent.isEditing {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .videoFooter {
-    margin: 5px 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 15px;
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
 
 }
 
 .defaultThumbnail {
-    width: 320px;
-    height: 180px;
-    background-color: #ddd;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 6px;
+  width: 320px;
+  height: 180px;
+  background-color: #ddd;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
 }
 
 .icon-checked {
-    position: absolute;
-    color: #f44336;
-    left: calc(50% - 20px);
-    top: calc(50% - 50px);
-    font-size: 40px;
+  position: absolute;
+  color: #f44336;
+  left: calc(50% - 20px);
+  top: calc(50% - 50px);
+  font-size: 60px;
 }
 
 .emptyPlaylist {
-    width: 100%;
-    text-align: center;
-    border-top: 1px solid #ddd;
-    padding-top: 20px;
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
 }
