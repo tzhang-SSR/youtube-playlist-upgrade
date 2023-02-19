@@ -254,7 +254,8 @@ export class PlaylistPageContentComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (removeVideos) {
-        window.location.reload()
+        // window.location.reload()
+        // this.getPlaylistItems()
       }
     });
   }
@@ -274,6 +275,10 @@ export class PlaylistPageContentComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       window.location.reload()
     });
+  }
+
+  clearSelectedVideos = () => {
+    this.selectedVideos = []
   }
 
 }

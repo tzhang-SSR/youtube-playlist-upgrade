@@ -90,22 +90,27 @@ export class PlaylistService {
   }
 
   addVideotoPlaylist = async (playlistId: string, videoId: string) => {
-    const res = await gapi.client.youtube.playlistItems
-      .insert({
-        part: ["snippet"],
-        resource: {
-          snippet: {
-            playlistId,
-            position: 0,
-            resourceId: {
-              kind: "youtube#video",
-              videoId,
+    try {
+      const res = await gapi.client.youtube.playlistItems
+        .insert({
+          part: ["snippet"],
+          resource: {
+            snippet: {
+              playlistId,
+              // position: 0,
+              resourceId: {
+                kind: "youtube#video",
+                videoId,
+              }
             }
           }
-        }
-      })
-    const response = await res
-    // console.log({ response })
+        })
+      const response = await res
+      // console.log({ response })
+    } catch (err) {
+      console.log({ err })
+    }
+
   }
 
   createNewPlaylist = async (title: string, isPublic: boolean = false) => {

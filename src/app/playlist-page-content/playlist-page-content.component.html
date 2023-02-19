@@ -6,15 +6,19 @@
         (toggleChange)="sortPlaylist()">
         Sort by Added Date
       </mat-slide-toggle>
-      <mat-slide-toggle [disabled]="keyword.length > 0" class="example-margin" color="warn" [(ngModel)]="isEditing">
+      <mat-slide-toggle [disabled]="keyword.length > 0" class="example-margin" color="warn" [(ngModel)]="isEditing"
+        (toggleChange)="clearSelectedVideos()">
         Edit by Group
       </mat-slide-toggle>
-      <div class="operationList" *ngIf="selectedVideos.length > 0">
+      <div class="operationList" *ngIf="isEditing && selectedVideos.length > 0">
         <button mat-raised-button color="warn" class="iconWrapper" (click)="deleteByGroup()">
           Delete
         </button>
         <button mat-raised-button class="iconWrapper" (click)="openGroupDialog()">
           Copy
+        </button>
+        <button mat-raised-button class="iconWrapper" (click)="openGroupDialog(true)">
+          Move
         </button>
         <!-- <div class="iconWrapper" (click)="openGroupDialog(true)">
                     <mat-icon>folder_special</mat-icon>

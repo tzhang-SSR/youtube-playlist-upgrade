@@ -25,10 +25,12 @@
           </button>
           <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="setSortOrder('asc')">
-              <span>By Title <i>(A to Z)</i></span>
+              <span style="margin-right: 10px;">Sort by title <i>(A to Z)</i></span>
+              <mat-icon *ngIf="sortOrder === 'asc'">check</mat-icon>
             </button>
-            <button mat-menu-item (click)="setSortOrder('desc')">
-              <span>By Title <i>(Z to A)</i></span>
+            <button mat-menu-item (click)=" setSortOrder('desc')">
+              <span style="margin-right: 10px;">Sort by title <i>(Z to A)</i></span>
+              <mat-icon *ngIf="sortOrder === 'desc'">check</mat-icon>
             </button>
           </mat-menu>
         </div>
