@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@ngx-env/builder": "^15.1.0",
     "@types/gapi": "^0.0.41",
     "@types/gapi.auth2": "^0.0.56",
     "@types/gapi.client": "^1.0.5",

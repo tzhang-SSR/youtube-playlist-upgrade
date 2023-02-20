@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewPlaylistDialogComponent } from './new-playlist-dialog/new-playlist-dialog.component';
 import { Router } from '@angular/router';
 import { GlobalVariables } from './global-variables';
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     // Load auth2 library
+    console.log('API_ket', this.API_KEY, this.CLIENT_ID)
     gapi.load("client:auth2", this.initClient);
     this.playlistService.getUserPlaylists().subscribe(item => { this.playlistInfo = item })
   }
