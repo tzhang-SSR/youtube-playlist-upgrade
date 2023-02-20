@@ -8,6 +8,9 @@ const routes: Routes = [
   { path: 'signin', component: SigninFormComponent },
   { path: 'playlist', component: PlaylistPageComponent, canActivate: [AuthGuard] },
   { path: 'playlist/:playlistId', component: PlaylistPageComponent, canActivate: [AuthGuard] },
+  {
+    path: 'googlef85ee20bb2a23e66.html',
+  },
   { path: '**', redirectTo: 'signin' },
   { path: '', pathMatch: 'full', redirectTo: 'signin' }
 ];
