@@ -1,6 +1,6 @@
 <h1 align="center"> YoutubePlaylistUpgrade </h1>
-<h2 align="center>For people who like to spend more time with their YouTube playlists</h2>
-<p><b>👷 Many features still in development, open for contributions! 👷<b></p>
+<h2 align="center">For people who like to spend more time with their YouTube playlists</h2>
+<p><b>👷 Many features still in development, open for contributions! 👷</b></p>
 
 ## ✍️ About
 
