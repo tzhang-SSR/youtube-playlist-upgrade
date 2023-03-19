@@ -5,14 +5,11 @@ import { SigninFormComponent } from './signin-form/signin-form.component';
 import { AuthGuard } from 'src/guard';
 
 const routes: Routes = [
+  { path: '', component: SigninFormComponent },
   { path: 'signin', component: SigninFormComponent },
   { path: 'playlist', component: PlaylistPageComponent, canActivate: [AuthGuard] },
   { path: 'playlist/:playlistId', component: PlaylistPageComponent, canActivate: [AuthGuard] },
-  {
-    path: 'googlef85ee20bb2a23e66.html',
-  },
   { path: '**', redirectTo: 'signin' },
-  { path: '', pathMatch: 'full', redirectTo: 'signin' }
 ];
 
 @NgModule({

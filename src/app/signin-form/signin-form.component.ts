@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { PlaylistService } from '../playlist.service';
 import { GlobalVariables } from '../global-variables';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signin-form',
@@ -20,7 +21,7 @@ export class SigninFormComponent implements OnInit {
   isAuthorized: boolean;
   user: any;
 
-  constructor(private ngZone: NgZone, private playlistService: PlaylistService, private router: Router) {
+  constructor(private ngZone: NgZone, private playlistService: PlaylistService, private router: Router, private authService: AuthService) {
     this.isAuthorized = false;
   }
 
@@ -50,17 +51,17 @@ export class SigninFormComponent implements OnInit {
   }
 
   handleAuthClick = () => {
+    // this.authService.signIn()
     this.ngZone.run(() => {
       this.GoogleAuth.signIn({ scope: this.SCOPES })
         .then(() => {
-          // Sign-in successful
           console.log('Sign in successful')
+          console.log('SignIn-Form.isSignedIn:', this.GoogleAuth.isSignedIn.get());
           // redirect user to the playlist page after sign-in
-          this.router.navigate(['/playlist'])
+          this.router.navigate(['/playlist']);
         },
           (err: any) => { console.error("Error signing in", { err }) });
     })
-
   }
 
   setSigninStatus = () => {
@@ -69,7 +70,9 @@ export class SigninFormComponent implements OnInit {
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
       // redirect user to the playlist page if they are already signed in
       if (this.isAuthorized) {
-        this.router.navigate(['/playlist'])
+        this.ngZone.run(() => {
+          this.router.navigate(['/playlist'])
+        })
       }
     })
   }

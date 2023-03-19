@@ -6,11 +6,11 @@
   <button mat-raised-button color="warn" id="signout-button" (click)="handleSignoutClick()">Log Out</button>
 </mat-toolbar>
 <section>
-  <div class="pageContent">
+  <div class="pageContent" *ngIf="playlistInfo && playlistInfo.length > 0">
     <div class="sidebarWrapper">
       <div class="sidebarHeader">
         <div>
-          <button mat-icon-button (click)="goToHomePgae()">
+          <button mat-icon-button (click)="goToHomePage()">
             <mat-icon>home</mat-icon>
           </button>
         </div>
@@ -39,4 +39,22 @@
     </div>
     <app-playlist-page-content [playlistId]="playlistId"></app-playlist-page-content>
   </div>
+  <ng-container *ngIf="playlistInfo.length == 0">
+    <div *ngIf="userHasNoChannel; else noPlaylist" class="emptyPlaceholder">
+      <h1>You don't have a YouTube channel 🤔</h1>
+      <p>Based on YouTube policy, you need to create a channel first to access your playlists. </p>
+      <p>Go to <a href="https://www.youtube.com/" target="_blank">YouTube</a> to
+        create one and come back refresh the page.</p>
+      <p>This should only take no more than 1 minute.</p>
+    </div>
+    <ng-template #noPlaylist>
+      <div class="emptyPlaceholder">
+        <h1>No playlist found 🤔</h1>
+        <p>Why don't we create one to start?</p>
+        <button mat-raised-button (click)="openNewPlaylistDialog()">
+          <mat-icon>control_point</mat-icon>
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
 </section>

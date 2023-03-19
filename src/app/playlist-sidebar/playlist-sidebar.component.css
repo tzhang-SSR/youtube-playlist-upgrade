@@ -1,64 +1,64 @@
 .playlist-sidebar {
-    max-height: 100vh;
-    overflow-y: scroll;
-    position: fixed;
+  max-height: 100vh;
+  position: fixed;
+  overflow-y: auto;
 }
 
 .playlistItems {
-    display: flex;
-    flex-direction: column;
-    border-top: none;
-    width: 100%;
-    padding: none;
+  display: flex;
+  flex-direction: column;
+  border-top: none;
+  width: 100%;
+  padding: none;
 }
 
 .tabLink {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 180px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 180px;
 }
 
 .tabLink:hover {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .tabLink div {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 
 .emptyPlaceholder {
-    text-align: center;
-    width: 225px;
+  text-align: center;
+  width: 225px;
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
-    background: #fff;
+  width: 8px;
+  background: #fff;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 
 .playlist-sidebar:hover::-webkit-scrollbar-thumb {
-    background: #888;
+  background: #888;
 }
 
 
 /* overwrite angular material component css */
 .mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
 .mat-button-toggle-group-appearance-standard {
-    border: none;
+  border: none;
 }
 
 .mat-button-toggle-button {
-    text-align: left;
-    width: auto;
+  text-align: left;
+  width: auto;
 }

@@ -1,0 +1,9 @@
+{
+  "/": {
+  "target": "http://localhost:4200",
+  "secure": false,
+  "rewrites": [
+    { "from": "^/.*$", "to": "/index.html" }
+  ]
+}
+}

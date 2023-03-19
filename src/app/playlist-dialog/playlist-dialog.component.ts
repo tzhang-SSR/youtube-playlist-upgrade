@@ -61,24 +61,25 @@ export class PlaylistDialogComponent implements OnInit {
   getPlaylistData = (): any => {
     this.ngZone.run(
       async () => {
-        const data = await this.playlistService.getPlaylists()
-        const playlistItems = data.result.items
-        const len = playlistItems?.length || 0
-        let statusList = []
+        const response = await this.playlistService.getPlaylists()
+        if (response) {
+          const playlistItems = response.result.items
+          const len = playlistItems?.length || 0
+          let statusList = []
 
-        // traverse playlists to check if current video exists in the playlsit
-        for (let i = 0; i < len; i++) {
-          const item = playlistItems ? playlistItems[i] : {}
-          const privacyStatus = item.status?.privacyStatus
-          const playlistId = item.id || ''
-          const statusResult = await this.getVideoStatus(playlistId, this.data.videoId)
-          const { inPlaylist, playlistItemId } = statusResult
+          // traverse playlists to check if current video exists in the playlsit
+          for (let i = 0; i < len; i++) {
+            const item = playlistItems ? playlistItems[i] : {}
+            const privacyStatus = item.status?.privacyStatus
+            const playlistId = item.id || ''
+            const statusResult = await this.getVideoStatus(playlistId, this.data.videoId)
+            const { inPlaylist, playlistItemId } = statusResult
+            const videoStatus = { playlistId, title: item?.snippet?.title, inPlaylist, playlistItemId, privacyStatus }
+            statusList.push(videoStatus)
+          }
 
-          const videoStatus = { playlistId, title: item?.snippet?.title, inPlaylist, playlistItemId, privacyStatus }
-          statusList.push(videoStatus)
+          this.playlistStatusList = statusList
         }
-
-        this.playlistStatusList = statusList
       }
     )
   }

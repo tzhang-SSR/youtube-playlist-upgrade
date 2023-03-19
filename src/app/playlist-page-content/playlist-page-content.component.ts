@@ -59,9 +59,9 @@ export class PlaylistPageContentComponent implements OnInit {
 
   handleRedirect = () => {
     this.ngZone.run(async () => {
-      const data = await this.playlistService.getPlaylists()
-      const playlistItems = data.result.items
-      if (playlistItems) {
+      const response = await this.playlistService.getPlaylists()
+      if (response) {
+        const playlistItems = response.result.items || []
         const initialPlaylistId = playlistItems[0].id
         this.router.navigate(['/playlist/', initialPlaylistId])
       }

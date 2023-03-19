@@ -27,6 +27,7 @@ export class PlaylistPageComponent {
   isAuthorized: boolean;
   user: any;
   sortOrder: string = 'default'
+  userHasNoChannel: boolean = false
 
   constructor(private route: ActivatedRoute, private ngZone: NgZone, private playlistService: PlaylistService, public dialog: MatDialog, private router: Router) {
     this.isAuthorized = false;
@@ -37,11 +38,13 @@ export class PlaylistPageComponent {
 
   handleRedirect = () => {
     this.ngZone.run(async () => {
-      const data = await this.playlistService.getPlaylists()
-      const playlistItems = data.result.items
-      if (playlistItems) {
-        const initialPlaylistId = playlistItems[0].id
-        this.router.navigate(['/playlist/', initialPlaylistId])
+      const response = await this.playlistService.getPlaylists()
+      if (response) {
+        const playlistItems = response.result.items
+        if (playlistItems) {
+          const initialPlaylistId = playlistItems[0].id
+          this.router.navigate(['/playlist/', initialPlaylistId])
+        }
       }
     })
   }
@@ -116,8 +119,8 @@ export class PlaylistPageComponent {
     });
   }
 
+  // Ref: https://developers.google.com/youtube/v3/docs/channels/list?apix=true
   getChannelInfo() {
-    //https://developers.google.com/youtube/v3/docs/channels/list?apix=true
     gapi.client.youtube.channels
       .list({
         part: ["snippet,contentDetails,statistics"],
@@ -136,7 +139,14 @@ export class PlaylistPageComponent {
   getPlaylist() {
     this.ngZone.run(async () => {
       const response = await this.playlistService.getPlaylists()
-      this.playlistInfo = this.formatPlaylistInfo(response?.result.items)
+      if (response) {
+        if (typeof response === 'string') {
+          this.userHasNoChannel = true
+          console.log('user has no channel')
+        } else {
+          this.playlistInfo = this.formatPlaylistInfo(response?.result.items)
+        }
+      }
     })
   }
 
@@ -151,16 +161,16 @@ export class PlaylistPageComponent {
 
   openNewPlaylistDialog = () => {
     const dialogRef = this.dialog.open(NewPlaylistDialogComponent)
-    dialogRef.afterClosed().subscribe(() => {
-      window.location.reload()
-    });
+    // dialogRef.afterClosed().subscribe(() => {
+    //   window.location.reload()
+    // });
   }
 
   setSortOrder = (sortOrder: string) => {
     this.sortOrder = sortOrder
   }
 
-  goToHomePgae = () => {
+  goToHomePage = () => {
     this.router.navigate(['/'])
   }
 

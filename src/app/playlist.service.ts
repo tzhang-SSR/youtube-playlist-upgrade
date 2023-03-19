@@ -18,21 +18,26 @@ export class PlaylistService {
 
   ngOnInit(): void { }
 
+  // Ref: https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
   getPlaylists = async () => {
-    //https://developers.google.com/youtube/v3/docs/playlists/list?apix=true
-    const res = await gapi.client.youtube.playlists
-      .list({
-        part: ["snippet, status",],
-        maxResults: 50,
-        mine: true,
-      })
-    const data = await res
-    // turn fetched user playlist title list into obserevable and subscribe to it
-    // reference: https://stackoverflow.com/questions/59449661/angular-how-to-subscribe-data-from-component-to-component
-    const formattedPlaylistInfo = this.formatPlaylistInfo(data.result.items)
-    this.userPlaylists.next(formattedPlaylistInfo);
-    // this.userPlaylists = this.formatPlaylistInfo(data.result.items)
-    return data
+    try {
+      const res = await gapi.client.youtube.playlists
+        .list({
+          part: ["snippet, status",],
+          maxResults: 50,
+          mine: true,
+        })
+      const data = await res
+      // turn fetched user playlist title list into obserevable and subscribe to it
+      // reference: https://stackoverflow.com/questions/59449661/angular-how-to-subscribe-data-from-component-to-component
+      const formattedPlaylistInfo = this.formatPlaylistInfo(data.result.items)
+      this.userPlaylists.next(formattedPlaylistInfo);
+      return data
+    } catch (err: any) {
+      console.log({ err })
+      return err.result.error.message
+    }
+    // return;
   }
 
   getPlaylistItems = async (playlistId: string) => {
@@ -106,7 +111,7 @@ export class PlaylistService {
           }
         })
       const response = await res
-      // console.log({ response })
+      console.log({ response })
     } catch (err) {
       console.log({ err })
     }
