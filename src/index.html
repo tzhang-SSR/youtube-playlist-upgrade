@@ -7,8 +7,6 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <script src="https://apis.google.com/js/platform.js?onload=init" defer></script>
-  <!-- <link rel="preload" href="https://apis.google.com/js/platform.js?onload=init" as="script"> -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,6 +18,21 @@
 
 <body class="mat-typography">
   <app-root></app-root>
+  <script src="https://apis.google.com/js/platform.js?onload=init"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <!-- <script>
+    function start() {
+      const GlobalVariables = require('./global-variables.json');
+      gapi.client.init({
+        apiKey: GlobalVariables.API_KEY,
+        discoveryDocs: GlobalVariables.DISCOVERY_DOCS,
+        clientId: GlobalVariables.CLIENT_ID,
+        scope: GlobalVariables.SCOPES,
+      })
+    }
+    // 1. Load the JavaScript client library.
+    gapi.load('client', start);
+  </script> -->
 </body>
 
 </html>

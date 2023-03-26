@@ -13,12 +13,17 @@ export class AuthService {
   constructor(private router: Router) { }
 
   init(): Promise<void> {
-    console.log("called init()")
-    return gapi.client.init({
-      apiKey: GlobalVariables.API_KEY,
-      discoveryDocs: GlobalVariables.DISCOVERY_DOCS,
-      clientId: GlobalVariables.CLIENT_ID,
-      scope: GlobalVariables.SCOPES,
+    return new Promise((resolve, reject) => {
+      gapi.load('client:auth2', () => {
+        gapi.client.init({
+          apiKey: GlobalVariables.API_KEY,
+          discoveryDocs: GlobalVariables.DISCOVERY_DOCS,
+          clientId: GlobalVariables.CLIENT_ID,
+          scope: GlobalVariables.SCOPES,
+        }).then(() => {
+          resolve();
+        }, (err: any) => { reject(err) });
+      });
     });
   }
 
@@ -40,17 +45,6 @@ export class AuthService {
   }
 
   signIn(): void {
-    //   this.GoogleAuth.signIn({ scopes }).then(() => {
-    //     console.log('Sign in successful')
-    //     console.log('SignIn-Form.isSignedIn:', this.GoogleAuth.isSignedIn.get());
-    //     // redirect user to the playlist page after sign-in
-    //     this.ngZone.run(() => {
-    //       this.router.navigate(['/playlist']);
-    //       console.log("redirection happened")
-    //     })
-    //   },
-    //     (err: any) => { console.error("Error signing in", { err }) });
-    // };
     this.GoogleAuth.signIn({ scopes: this.SCOPES })
       .then(() => {
         console.log('Sign in successful')

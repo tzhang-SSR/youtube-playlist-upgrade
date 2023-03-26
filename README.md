@@ -14,7 +14,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 <p align="center"><img src="./src/assets/screenshot.png" alt="app screenshot" height="400" /></p>
 
-## ✨Features
+## ✨ Features
 
 - ✔️ View playlisy videos in grid layout
 - ✔️ Delete video/videos from a playlist
