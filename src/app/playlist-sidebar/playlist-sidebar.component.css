@@ -2,6 +2,8 @@
   max-height: 100vh;
   position: fixed;
   overflow-y: auto;
+  margin-top: 50px;
+  z-index: 100;
 }
 
 .playlistItems {
@@ -18,7 +20,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 10px;
-  border-radius: 10px;
   cursor: pointer;
   width: 180px;
 }

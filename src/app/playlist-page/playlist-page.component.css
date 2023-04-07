@@ -1,12 +1,16 @@
 .pageContent {
   display: grid;
   grid-template-columns: 225px 1fr;
+  padding-top: 50px;
 }
 
 .mat-toolbar {
   display: flex;
   justify-content: space-between;
   background-color: #fff;
+  position: fixed;
+  min-height: 50px;
+  z-index: 999;
 }
 
 .pageHeader {
@@ -22,6 +26,12 @@
 .sidebarHeader {
   display: flex;
   justify-content: space-between;
+  top: 50px;
+  z-index: 999;
+  position: fixed;
+  min-height: 50px;
+  background-color: #fff;
+  min-width: 232px;
 }
 
 .sidebarHeader div {
@@ -39,7 +49,7 @@
 .playlist-sidebar .playlistTab {
   display: flex;
   align-items: center;
-  min-width: 220px;
+  min-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
