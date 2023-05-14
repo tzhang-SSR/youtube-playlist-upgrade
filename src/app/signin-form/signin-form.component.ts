@@ -57,7 +57,7 @@ export class SigninFormComponent implements OnInit {
         .then(() => {
           console.log('Sign in successful')
           console.log('SignIn-Form.isSignedIn:', this.GoogleAuth.isSignedIn.get());
-          // redirect user to the playlist page after sign-in
+          // redirect user to the dashboard page after sign-in
           this.router.navigate(['/playlist']);
         },
           (err: any) => { console.error("Error signing in", { err }) });
@@ -68,7 +68,7 @@ export class SigninFormComponent implements OnInit {
     this.ngZone.run(() => {
       this.user = this.GoogleAuth.currentUser.get();
       this.isAuthorized = this.user.hasGrantedScopes(this.SCOPES);
-      // redirect user to the playlist page if they are already signed in
+      // redirect user to the dashboard page if they are already signed in
       if (this.isAuthorized) {
         this.ngZone.run(() => {
           this.router.navigate(['/playlist'])

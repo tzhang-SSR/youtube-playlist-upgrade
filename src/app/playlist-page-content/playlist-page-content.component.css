@@ -138,6 +138,21 @@ a {
   cursor: pointer;
 }
 
+.videoTime {
+  position: absolute;
+  background-color: #000;
+  color: #fff;
+  padding: 2px 5px;
+  height: 20px;
+  border-radius: 3px;
+  right: 5px;
+  font-weight: 500;
+  /* height of the thumbnail: 180px; */
+  top: calc(180px - 20px - 10px);
+  opacity: 0.8;
+  text-align: center;
+}
+
 .videoFooter {
   margin: 5px 0;
   display: flex;

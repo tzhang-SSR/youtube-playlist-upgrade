@@ -152,6 +152,7 @@ export class PlaylistPageContentComponent implements OnInit {
   getPlaylistItems = () => {
     this.ngZone.run(async () => {
       let videoItemList = await this.playlistService.getPlaylistItems(this.playlistId)
+      console.log({ videoItemList })
       // sort the playlist videos following this order: from the newest to the oldest
       this.playlistItems = videoItemList.sort(this.sortPlaylistByAddedDate)
       this.playlistItemsCache = videoItemList.sort(this.sortPlaylistByAddedDate)

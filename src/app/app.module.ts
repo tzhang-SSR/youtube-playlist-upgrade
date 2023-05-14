@@ -26,6 +26,7 @@ import { SigninFormComponent } from './signin-form/signin-form.component';
 import { PlaylistPageContentComponent } from './playlist-page-content/playlist-page-content.component';
 import { PlaylistSidebarComponent } from './playlist-sidebar/playlist-sidebar.component';
 import { AuthGuard } from 'src/guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { AuthGuard } from 'src/guard';
     AddVideosDialogComponent,
     SigninFormComponent,
     PlaylistPageContentComponent,
-    PlaylistSidebarComponent
+    PlaylistSidebarComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

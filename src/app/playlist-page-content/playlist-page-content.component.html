@@ -36,6 +36,7 @@
       <div *ngIf="item.isValid; else invalidVideo" class="videoContent">
         <a target="_blank" href="{{VIDEO_URL_PREFIX}}{{item.videoId}}">
           <img src={{item.img}} alt={{item.title}} />
+          <div class="videoTime">00:00</div>
         </a>
         <div class="videoTitleSection">
           <a target="_blank" href="{{VIDEO_URL_PREFIX}}{{item.videoId}}">
